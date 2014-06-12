@@ -15,8 +15,8 @@
 						problem: $("#sel-problem").val()
 					}),
 					success: function(data) {
-						if (data["game-id"]) {
-							window.location = "/overlord.html?gameid=" + data["game-id"]
+						if (data["game_id"]) {
+							window.location = "/overlord.html?gameid=" + data["game_id"]
 						} else {
 							alert("Invalid response, I blame ojones!");
 						}
