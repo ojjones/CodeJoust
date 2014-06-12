@@ -10,9 +10,10 @@
 					type: "POST",
 					url: "/setup",
 					dataType: "json",
-					data: {
+					processData: false,
+					data: JSON.stringify({
 						problem: $("#sel-problem").val()
-					},
+					}),
 					success: function(data) {
 						alert(data);
 					}

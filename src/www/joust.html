@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/bootstrap.js"></script>
+	<script src="ace/build/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		jQuery(function($) {
+
+			var editor = ace.edit("editor");
+			editor.setTheme("ace/theme/monokai");
+			editor.getSession().setMode("ace/mode/c_cpp");
+
+			$('#modal-problem').modal({show: false});
+			$('#btn-show-problem').click(function() {
+				$('#model-problem').modal('show');
+			});
+
+		});
+	</script>
+
+	<link rel="stylesheet" href="css/bootstrap.css" />
+	<style type="text/css">
+		body {
+			padding-top: 40px;
+			padding-bottom: 40px;
+			background-color: #eee;
+		}
+
+		#editor {
+			margin: 5px 0 0;
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			height: 800px;
+			font-size:24px;
+		}
+	</style>
+</head>
+<body>
+
+	<div class="container">
+		<div class="row">
+			<h1>fizzbuzz - Team 1</h1>
+		</div>
+		<div class="row">
+			<button type="button" class="btn btn-primary btn-lg">Compile</button>
+			<button id="btn-show-problem" type="button" class="btn btn-primary btn-lg" data-toggle="model" data-target="myModel">View Problem</button>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div id="editor"></div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="model-problem" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">fizzbuzz</h4>
+			</div>
+			<div class="modal-body">
+				The Problem
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>
