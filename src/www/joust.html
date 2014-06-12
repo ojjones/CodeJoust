@@ -69,7 +69,7 @@
 			};
 
 			ws.onopen = function() {
-				msg = JSON.stringify(wsapi.INIT_REQ(getParameterByName("gameid")));
+				msg = JSON.stringify(wsapi.INIT_REQ(parseInt(getParameterByName("gameid"))));
 				console.log("Sending msg: " + msg);
 				ws.send(msg);
 			};
