@@ -6,15 +6,69 @@
 	<script src="ace/build/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript">
 		jQuery(function($) {
+			const INIT = 0;
+			const START = 1;
+			const STOP = 2;
+
+			$btnCompile = $("#btn-complile");
+
+			/******************************
+			  IO Event Handlers
+			 ******************************/
+
+			initIOHandler = function(e) {
+			};
+
+			startIOHandler = function(e) {
+			};
+
+			stopIOHandler = function(e) {
+			};
+
+			/******************************
+			  Button Event Handlers
+			 ******************************/
+
+			compileBtnHandler = function() {
+				$btnCompile.button("loading");
+			};
+
+			$btnCompile.click(compileBtnHandler);
 
 			var editor = ace.edit("editor");
 			editor.setTheme("ace/theme/monokai");
 			editor.getSession().setMode("ace/mode/c_cpp");
 
-			$('#modal-problem').modal({show: false});
-			$('#btn-show-problem').click(function() {
-				$('#model-problem').modal('show');
-			});
+			var ws = new WebSocket("ws://:8080");
+
+			ws.onbeforeunload = function(e) {
+			};
+
+			ws.onmessage = function(e) {
+				data = JSON.parse(e.data);
+				console.log(data);
+
+				switch(data.type) {
+					case INIT:
+						initIOHandler(data);
+						break;
+					case START:
+						startIOHandler(data);
+						break;
+					case STOP:
+						stopIOHandler(data);
+						break;
+					default:
+						console.log(data);
+
+				}
+			};
+
+			ws.onopen = function() {
+			};
+
+			ws.onclose = function(e) {
+			};
 
 		});
 	</script>
@@ -22,9 +76,13 @@
 	<link rel="stylesheet" href="css/bootstrap.css" />
 	<style type="text/css">
 		body {
-			padding-top: 40px;
+			padding-top: 20px;
 			padding-bottom: 40px;
 			background-color: #eee;
+		}
+
+		#editor-container {
+			height: 800px;
 		}
 
 		#editor {
@@ -34,7 +92,6 @@
 			bottom: 0;
 			left: 0;
 			right: 0;
-			height: 800px;
 			font-size:24px;
 		}
 	</style>
@@ -46,32 +103,20 @@
 			<h1>fizzbuzz - Team 1</h1>
 		</div>
 		<div class="row">
-			<button type="button" class="btn btn-primary btn-lg">Compile</button>
+			<button id="btn-compile" type="button" class="btn btn-primary btn-lg">Compile</button>
 			<button id="btn-show-problem" type="button" class="btn btn-primary btn-lg" data-toggle="model" data-target="myModel">View Problem</button>
 		</div>
 		<div class="row">
-			<div class="col-md-12">
+			<div id="editor-container" class="col-md-12">
 				<div id="editor"></div>
 			</div>
 		</div>
-	</div>
-
-	<div class="modal fade" id="model-problem" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title" id="myModalLabel">fizzbuzz</h4>
-			</div>
-			<div class="modal-body">
-				The Problem
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			</div>
+			<div class="clearfix"></div>
+		<div class="row">
+			<h2>Problem: fizzbuzz</h2>
+			<p>Write a program that prints the numbers from 1 to 100. But for multiples of three print “Fizz” instead of the number and for the multiples of five print “Buzz”. For numbers which are multiples of both three and five print “FizzBuzz”.</p>
 		</div>
 	</div>
-</div>
 
 </body>
 </html>

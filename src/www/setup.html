@@ -15,7 +15,14 @@
 						problem: $("#sel-problem").val()
 					}),
 					success: function(data) {
-						alert(data);
+						if (data["game-id"]) {
+							window.location = "/overlord.html?gameid=" + data["game-id"]
+						} else {
+							alert("Invalid response, I blame ojones!");
+						}
+					},
+					error: function() {
+						alert("Something went wrong, I blame ojones!");
 					}
 				});
 			});
