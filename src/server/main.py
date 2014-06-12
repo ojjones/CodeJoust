@@ -2,15 +2,18 @@ import os.path
 import cherrypy
 from cherrypy.lib.static import serve_file
  
+current_dir = os.path.abspath('../www')
+
 config = {
     '/': {
         'tools.staticdir.on' : True,
-        'tools.staticdir.dir' : '/home/ojones/Programs/IsiCodeJoust/src/www',
+        'tools.staticdir.dir' : current_dir,
         'tools.staticdir.index' : 'index.html',
         },
     '/setup': {
         'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
         'tools.sessions.on': True,
+        'tools.json_in.on': True,
         'tools.response_headers.on': True,
         'tools.response_headers.headers': [('Content-Type', 'text/plain')]
         }
@@ -19,19 +22,15 @@ config = {
 class Root():
     exposed = True
 
-    def index(self,name):
-        print name
-        return serve_file(os.path.join(current_dir, name))
-    index.exposed = True
- 
     @cherrypy.tools.accept(media='text/plain')
     def GET(self):
         return cherrypy.session['mystring']
 
     @cherrypy.tools.json_in()
     def POST(self, problem):
-        print problem
-        return 'foobahr'
+        test = cherrypy.request.json
+        print test
+        return test
 
     def PUT(self, another_string):
         cherrypy.session['mystring'] = another_string
