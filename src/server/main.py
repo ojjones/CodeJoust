@@ -9,11 +9,23 @@ from ws4py.websocket import WebSocket
 from ws4py.messaging import TextMessage
  
 current_dir = os.path.abspath('../www')
+current_games = {}
 
 class teamHandler(WebSocket):
     def received_message(self, m):
-        print json.loads(m)
-        cherrypy.engine.publish('websocket-broadcast', m)
+
+        m = json.loads(str(m))
+
+        game_id = m['game_id']
+
+        tmp = {'type':1,
+               'game_id':game_id,
+               'problem_id':current_games[game_id]['problem'],
+               'problem_text':"Hello World",
+               'code_session':"int main(void)"
+              }
+        response = json.dumps(tmp)
+        self.send(response)
 
     def closed(self, code, reason="A client left the room without a proper explanation."):
         cherrypy.engine.publish('websocket-broadcast', TextMessage(reason))
@@ -51,10 +63,13 @@ config = {
 class Root():
     exposed = True
     game_id = 0
-    current_games = {}
 
     @cherrypy.expose
-    def ws(self):
+    def team(self):
+        cherrypy.log("Handler created: %s" % repr(cherrypy.request.ws_handler))
+
+    @cherrypy.expose
+    def screen(self):
         cherrypy.log("Handler created: %s" % repr(cherrypy.request.ws_handler))
 
     @cherrypy.tools.accept(media='text/plain')
@@ -67,8 +82,8 @@ class Root():
             tmpGameId = self.game_id
             self.game_id += 1
             problem = cherrypy.request.json
-            self.current_games[tmpGameId] = {'Problem':problem['problem']}
-            print self.current_games
+            current_games[tmpGameId] = {'problem':problem['problem']}
+            print current_games
             return json.dumps({'game_id':tmpGameId})
 
         return vpath
