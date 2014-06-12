@@ -1,19 +1,37 @@
-import random
-import string
-
+import os.path
 import cherrypy
+from cherrypy.lib.static import serve_file
+ 
+config = {
+    '/': {
+        'tools.staticdir.on' : True,
+        'tools.staticdir.dir' : '/home/ojones/Programs/IsiCodeJoust/src/www',
+        'tools.staticdir.index' : 'index.html',
+        },
+    '/setup': {
+        'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
+        'tools.sessions.on': True,
+        'tools.response_headers.on': True,
+        'tools.response_headers.headers': [('Content-Type', 'text/plain')]
+        }
+     }
 
-class StringGeneratorWebService(object):
+class Root():
     exposed = True
 
+    def index(self,name):
+        print name
+        return serve_file(os.path.join(current_dir, name))
+    index.exposed = True
+ 
     @cherrypy.tools.accept(media='text/plain')
     def GET(self):
         return cherrypy.session['mystring']
 
-    def POST(self, length=8):
-        some_string = ''.join(random.sample(string.hexdigits, int(length)))
-        cherrypy.session['mystring'] = some_string
-        return some_string
+    @cherrypy.tools.json_in()
+    def POST(self, problem):
+        print problem
+        return 'foobahr'
 
     def PUT(self, another_string):
         cherrypy.session['mystring'] = another_string
@@ -21,14 +39,4 @@ class StringGeneratorWebService(object):
     def DELETE(self):
         cherrypy.session.pop('mystring', None)
 
-if __name__ == '__main__':
-    conf = {
-        '/': {
-            'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
-            'tools.sessions.on': True,
-            'tools.response_headers.on': True,
-            'tools.response_headers.headers': [('Content-Type', 'text/plain')],
-        }
-    }
-
-    cherrypy.quickstart(StringGeneratorWebService(), '/', conf)
+cherrypy.quickstart(Root(), '/', config=config)
