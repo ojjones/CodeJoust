@@ -13,11 +13,10 @@
 			const STOP = 2;
 
 			$btnCompile = $("#btn-complile");
-			$spanProblemTitles = $(".span-problem-title");
 			$divProblemText = $("#div-problem-text");
 
 			if (getParameterByName("problem") != undefined) {
-				$spanProblemTitle.val(getParameterByName("problem"));
+				$(".problem-title").val(getParameterByName("problem"));
 			}
 
 			/******************************
