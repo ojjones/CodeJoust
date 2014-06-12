@@ -13,7 +13,12 @@
 			const STOP = 2;
 
 			$btnCompile = $("#btn-complile");
+			$spanProblemTitle = $("#span-problem-title");
 			$divProblemText = $("#div-problem-text");
+
+			if (getParameterByName("problem") != undefined) {
+				$spanProblemTitle.val(getParameterByName("problem"));
+			}
 
 			/******************************
 			  IO Event Handlers
@@ -21,6 +26,7 @@
 
 			initIOHandler = function(e) {
 				$divProblemText.val(e.problem_text);
+				editor.setValue(e.code_session);
 			};
 
 			startIOHandler = function(e) {
@@ -120,7 +126,7 @@
 		</div>
 			<div class="clearfix"></div>
 		<div class="row">
-			<h2>Problem: fizzbuzz</h2>
+			<h2>Problem: <span id="span-problem-title">fizzbuzz<a/></h2>
 			<div id="div-problem-text">
 				<p>Write a program that prints the numbers from 1 to 100. But for multiples of three print 'Fizz' instead of the number and for the multiples of five print 'Buzz'. For numbers which are multiples of both three and five print 'FizzBuzz'.</p>
 			</div>
