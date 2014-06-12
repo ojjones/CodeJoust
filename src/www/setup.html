@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+<head>
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript">
+		jQuery(function($) {
+
+			$("#btn-joust").click(function() {
+				$.ajax({
+					type: "POST",
+					url: "/setup",
+					dataType: "json",
+					data: {
+						problem: $("#sel-problem").val()
+					},
+					success: function(data) {
+						alert(data);
+					}
+				});
+			});
+
+		});
+	</script>
+
+	<link rel="stylesheet" href="css/bootstrap.css" />
+	<style type="text/css">
+		body {
+			padding-top: 40px;
+			padding-bottom: 40px;
+			background-color: #eee;
+		}
+		.form-setup {
+			max-width: 330px;
+			padding: 15px;
+			margin: 0 auto;
+		}
+		.btn {
+			margin-top: 5px;
+		}
+	</style>
+</head>
+<body>
+
+	<div class="container">
+		<form class="form-setup" role="form">
+			<h2>Isilon Joust Setup</h2>
+			<select id="sel-problem" class="form-control">
+				<option>fizzbuzz</option>
+				<option>Peter's Smokes</option>
+				<option>finddup</option>
+				<option>score</option>
+				<option>f91</option>
+			</select>
+			<button id="btn-joust" class="btn btn-lg btn-primary btn-block" type="button">Let's Joust!</button>
+		</form>
+	</div>
+
+</body>
+</html>
