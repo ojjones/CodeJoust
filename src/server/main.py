@@ -10,7 +10,15 @@ from ws4py.messaging import TextMessage
  
 current_dir = os.path.abspath('../www')
 
-class ChatWebSocketHandler(WebSocket):
+class teamHandler(WebSocket):
+    def received_message(self, m):
+        print json.loads(m)
+        cherrypy.engine.publish('websocket-broadcast', m)
+
+    def closed(self, code, reason="A client left the room without a proper explanation."):
+        cherrypy.engine.publish('websocket-broadcast', TextMessage(reason))
+
+class screenHandler(WebSocket):
     def received_message(self, m):
         cherrypy.engine.publish('websocket-broadcast', m)
 
@@ -30,9 +38,13 @@ config = {
         'tools.response_headers.on': True,
         'tools.response_headers.headers': [('Content-Type', 'application/json')]
         },
-    '/ws': {
+    '/team': {
         'tools.websocket.on': True,
-        'tools.websocket.handler_cls': ChatWebSocketHandler
+        'tools.websocket.handler_cls': teamHandler
+        },
+    '/screen': {
+        'tools.websocket.on': True,
+        'tools.websocket.handler_cls': screenHandler
         }
      }
 
@@ -70,7 +82,7 @@ class Root():
 if __name__ == '__main__':
     cherrypy.config.update({
         'server.socket_host': '0.0.0.0',
-        'server.socket_port': 9000
+        'server.socket_port': 8080
     })
 
     WebSocketPlugin(cherrypy.engine).subscribe()
