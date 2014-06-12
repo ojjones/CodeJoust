@@ -9,10 +9,11 @@
 				$.ajax({
 					type: "POST",
 					url: "/setup",
+					contentType: "application/json",
 					dataType: "json",
-					data: {
+					data: JSON.stringify({
 						problem: $("#sel-problem").val()
-					},
+					}),
 					success: function(data) {
 						alert(data);
 					}
