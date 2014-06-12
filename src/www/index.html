@@ -5,6 +5,38 @@
 	<script type="text/javascript" src="js/jquery.js"></script>
 	<script type="text/javascript" src="js/todo.js"></script>
 
+	<script type="text/javascript">
+		jQuery(function($) {
+
+			$("#btn-join-game").click(function() {
+				$.ajax({
+					type: "POST",
+					url: "/join" ,
+					contentType: "application/json",
+					dataType: "json",
+					data: JSON.stringify({
+						game_id: $("#tbx-game-id").val()
+					}),
+					success: function(data) {
+						if (data["team"] != undefined &&
+							data["game_id"] != undefined &&
+							data["problem"] != undefined) {
+							window.location = "/joust.html?team="
+								+ data["team"] + "&game_id=" + data["game_id"]
+								+ "&problem=" + data["problem"]
+						}
+						else {
+							alert("Incorrect response");
+						}
+					},
+					error: function() {
+						alert("Failed: Blame mkirby");
+					}
+				});
+			});
+		});
+	</script>
+
 	<link rel="stylesheet" href="css/bootstrap.css" />
 	<style type="text/css">
 		body {
@@ -26,9 +58,13 @@
 <body>
 
 	<div class="container">
+		<h2>Isilon Code Joust</h2>
+		<div class="input-group">
+			<span class="input-group-addon"></span>
+			<input type="text" id="tbx-game-id" class="form-control" placeholder="Game Id">
+		</div>
 		<form class="form-setup" role="form">
-			<h2>Isilon Code Joust</h2>
-			<a href="#" class="btn btn-primary btn-lg" role="button">Join Game</a>
+			<a href="#" id="btn-join-game" class="btn btn-primary btn-lg" role="button">Join Game</a>
 			<a href="setup.html" class="btn btn-primary btn-lg" role="button">Create Game</a>
 		</form>
 	</div>

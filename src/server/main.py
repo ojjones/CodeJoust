@@ -4,10 +4,12 @@ import json
 from cherrypy.lib.static import serve_file
 
 import random
-from ws4py.server.cherrypyserver import WebSocketPlugin, WebSocketTool
 from ws4py.websocket import WebSocket
+from ws4py.server.cherrypyserver import WebSocketPlugin, WebSocketTool
+
 from ws4py.messaging import TextMessage
- 
+import validate
+
 current_dir = os.path.abspath('../www')
 current_games = {}
 
@@ -57,6 +59,20 @@ config = {
     '/screen': {
         'tools.websocket.on': True,
         'tools.websocket.handler_cls': screenHandler
+        },
+    '/join': {
+        'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
+        'tools.sessions.on': True,
+        'tools.json_in.on': True,
+        'tools.response_headers.on': True,
+        'tools.response_headers.headers': [('Content-Type', 'application/json')]
+        },
+    '/compile': {
+        'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
+        'tools.sessions.on': True,
+        'tools.json_in.on': True,
+        'tools.response_headers.on': True,
+        'tools.response_headers.headers': [('Content-Type', 'application/json')]
         }
      }
 
@@ -82,9 +98,38 @@ class Root():
             tmpGameId = self.game_id
             self.game_id += 1
             problem = cherrypy.request.json
-            current_games[tmpGameId] = {'problem':problem['problem']}
+            current_games[tmpGameId] = {'Problem':problem['problem']}
+            current_games[tmpGameId]['team'] = 0
             print current_games
             return json.dumps({'game_id':tmpGameId})
+
+        if vpath == 'compile':
+            args = cherrypy.request.json
+            team = args['team']
+            game_id = args['game_id']
+            contents = args['code']
+            text_file = open(game_id + "." + team + ".c", "w")
+            text_file.write(contents)
+            text_file.close()
+
+            return validate(game_id + "." + team + ".c")
+
+        if vpath == "join":
+            args = cherrypy.request.json
+            game_id = int(args['game_id'])
+
+            if game_id not in current_games:
+                return json.dumps("Error: game_id " + game_id + "not found")
+
+            team = current_games[game_id]["team"]
+            current_games[game_id]["team"] = current_games[game_id]["team"] + 1
+
+            return_val = {}
+            return_val['team'] = team
+            return_val['game_id'] = game_id
+            return_val['problem'] = current_games[game_id]["Problem"]
+
+            return json.dumps(return_val)
 
         return vpath
 
