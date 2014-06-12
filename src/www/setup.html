@@ -15,7 +15,7 @@
 						problem: $("#sel-problem").val()
 					}),
 					success: function(data) {
-						if (data["game_id"]) {
+						if (data["game_id"] != undefined) {
 							window.location = "/overlord.html?gameid=" + data["game_id"]
 						} else {
 							alert("Invalid response, I blame ojones!");
