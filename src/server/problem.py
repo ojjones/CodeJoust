@@ -13,7 +13,7 @@ class JoustProblem:
     def __init__(self, problem_name):
         # XXXJDR make this cleaner, secure, etc...
         self.reference_input = "../problems/%s/sample_input" % problem_name
-        self.reference_input = "../problems/%s/sample_output" % problem_name
+        self.reference_output = "../problems/%s/sample_output" % problem_name
     def make_compile_cmd(self, filename):
         return
     def make_binary_name(self, filename):
