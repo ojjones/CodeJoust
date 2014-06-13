@@ -13,21 +13,6 @@ import subprocess
 # TODO: Make actual module, put problem class some place else
 # TODO: Make some classes and shit, python loves classes
 
-class JoustProblem:
-    def __init__(self, reference_input, reference_output):
-        self.reference_input = reference_input
-        self.reference_output = reference_output
-    def make_compile_cmd(self, filename):
-        return
-    def make_binary_name(self, filename):
-        return
-
-class CJoustProblem(JoustProblem):
-    def make_binary_name(self, filename):
-        return "%s.out" % filename
-    def make_compile_cmd(self, filename):
-        return "gcc %s -o %s" % (filename, self.make_binary_name(filename))
-
 def _pretty_output(output):
     return output.rstrip('\n').split('\n')
 
