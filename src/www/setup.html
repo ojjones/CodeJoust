@@ -32,11 +32,12 @@
                                 url: "/problems",
 				dataType: "json",
                                 success: function(data) {
-                                        if (data["problems"] != undefined) {
-                                                var problems = data["problems"]
-                                        } else {
-                                                alert("Invalid response, I blame ojones!");
-                                        }
+                                        console.log(data)
+                                        $.each(data,function(index,value){
+                                                var x = $("<option>").text(index);
+                                                $("#sel-problem").append(x);
+
+                                                });
                                 },
                                 error: function() {
                                         alert("Something went wrong, I blame ojones!");
@@ -68,11 +69,6 @@
 		<form class="form-setup" role="form">
 			<h2>Isilon Joust Setup</h2>
 			<select id="sel-problem" class="form-control">
-				<option>fizzbuzz</option>
-				<option>Peter's Smokes</option>
-				<option>finddup</option>
-				<option>score</option>
-				<option>f91</option>
 			</select>
 			<button id="btn-joust" class="btn btn-lg btn-primary btn-block" type="button">Let's Joust!</button>
 		</form>

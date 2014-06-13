@@ -133,8 +133,9 @@ class Root():
     @cherrypy.tools.accept(media='text/plain')
     def GET(self, vpath): # hopefully this works
         if vpath == 'problems':
-             problems = problem.list_problems()
-             return json.dumps(problems)
+            problems = problem.list_problems()
+            print problems
+            return json.dumps(problems)
 
         return "Nothing here for you"
 
