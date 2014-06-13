@@ -137,11 +137,11 @@ class Root():
             team = args['team']
             game_id = args['game_id']
             contents = args['code']
-            text_file = open(game_id + "." + team + ".c", "w")
+            text_file = open(str(game_id) + "." + str(team) + ".c", "w")
             text_file.write(contents)
             text_file.close()
 
-            return validate(game_id + "." + team + ".c")
+            return validate(str(game_id) + "." + str(team) + ".c")
 
         if vpath == "join":
             args = cherrypy.request.json
