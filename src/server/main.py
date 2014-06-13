@@ -26,9 +26,8 @@ class teamHandler(WebSocket):
         ty = m['type']
 
         if ty == 0:
-            current_games[game_id][team_id]['team_session'] = self
-            if "code_session" in current_games[game_id][team_id]:
-                code = current_games[game_id][team_id]["code_session"]
+            if  "code_session" in current_games[game_id]['teams'][team_id]:
+                code = current_games[game_id]['teams'][team_id]["code_session"]
             else:
                 code = "";
             tmp = {'type':1,
@@ -39,11 +38,11 @@ class teamHandler(WebSocket):
                   }
             response = json.dumps(tmp)
             self.send(response)
-            current_games[game_id][team_id]['team_session'] = self
+            current_games[game_id]['teams'][team_id]['team_session'] = self
 
         if ty == 2:
             code = m['code']
-            current_games[game_id][team_id]["code_session"] = code
+            current_games[game_id]['teams'][team_id]["code_session"] = code
 
     def closed(self, code, reason="A client left the room without a proper explanation."):
         cherrypy.engine.publish('websocket-broadcast', TextMessage(reason))
@@ -134,7 +133,9 @@ class Root():
             self.game_id += 1
             problem = cherrypy.request.json
             current_games[tmpGameId] = {'problem':problem['problem']}
-            current_games[tmpGameId]['team'] = 0
+            current_games[tmpGameId]['teams'] = []
+            current_games[tmpGameId]['teams'].append({})
+            current_games[tmpGameId]['teams'].append({})
             print current_games
             return json.dumps({'game_id':tmpGameId})
 
@@ -156,8 +157,14 @@ class Root():
             if game_id not in current_games:
                 return json.dumps("Error: game_id " + game_id + "not found")
 
-            team = current_games[game_id]["team"]
-            current_games[game_id]["team"] = current_games[game_id]["team"] + 1
+            if 'enabled' not in current_games[game_id]['teams'][0]:
+                team = 0
+                current_games[game_id]['teams'][0]['enabled'] = 1
+            elif 'enabled' not in current_games[game_id]['teams'][1]:
+                team = 1
+                current_games[game_id]['teams'][1]['enabled'] = 1
+            else:
+                team = -1
 
             return_val = {}
             return_val['team'] = team
