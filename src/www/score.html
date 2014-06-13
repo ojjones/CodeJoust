@@ -17,6 +17,41 @@
             editor_team_1.setTheme("ace/theme/monokai");
             editor_team_1.getSession().setMode("ace/mode/c_cpp");
             editor_team_1.setReadOnly(true);
+
+            var game_id = parseInt(getParameterByName("game_id"));
+
+            var ws = new WebSocket("ws://localhost:8080/team");
+
+            ws.onbeforeunload = function(e) {
+            };
+
+            ws.onmessage = function(e) {
+                data = JSON.parse(e.data);
+                switch(data.type) {
+                    case wsapi.EDITOR_UPDATE:
+                        switch(data.team)
+                        {
+                            case 0:
+                                editor_team_0.setValue(data.message);
+                                break;
+                            case 1:
+                                editor_team_1.setValue(data.message);
+                                break;
+                        }
+                        break;
+                default:
+                    console.log(data);
+                }
+            };
+
+            ws.onopen = function() {
+                var msg = JSON.stringify(wsapi.INIT_REQ(game_id, -1));
+                console.log("Sending msg: " + msg);
+                wa.send(msg);
+            };
+
+            ws.onclose = function() {
+            };
         });
     </script>
 

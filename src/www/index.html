@@ -32,6 +32,9 @@
 					}
 				});
 			});
+			$("#btn-score-game").click(function() {
+				window.location = "/score.html?game_id=" + $("#tbx-game-id").val()
+			});
 		});
 	</script>
 
@@ -63,6 +66,7 @@
 		</div>
 		<form class="form-setup" role="form">
 			<a href="#" id="btn-join-game" class="btn btn-primary btn-lg" role="button">Join Game</a>
+			<a href="#" id="btn-score-game" class="btn btn-primary btn-lg" role="button">Watch Game</a>
 			<a href="setup.html" class="btn btn-primary btn-lg" role="button">Create Game</a>
 		</form>
 	</div>

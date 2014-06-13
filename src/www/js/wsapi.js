@@ -8,6 +8,8 @@
 
 	wsapi.TEAM_CODE_PUSH_ID = 2;
 
+	wsapi.EDITOR_UPDATE = 3;
+
 	wsapi.INIT_REQ = function(gameid, teamid) {
 		return {
 			type: wsapi.INIT_REQ_ID,
