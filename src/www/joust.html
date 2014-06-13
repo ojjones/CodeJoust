@@ -97,7 +97,8 @@
 				}
 			});
 
-			var ws = new WebSocket("ws://localhost:8080/team");
+			var host = window.location.host;
+			var ws = new WebSocket("ws://" + host + "/team");
 
 			ws.onbeforeunload = function(e) {
 			};

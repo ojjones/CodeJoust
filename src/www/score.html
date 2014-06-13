@@ -20,7 +20,8 @@
 
             var game_id = parseInt(getParameterByName("game_id"));
 
-            var ws = new WebSocket("ws://localhost:8080/score");
+			var host = window.location.host;
+			var ws = new WebSocket("ws://" + host + "/score");
 
             ws.onbeforeunload = function(e) {
             };
