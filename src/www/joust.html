@@ -56,6 +56,7 @@
 
 			compileBtnHandler = function() {
 				$btnCompile.button("loading");
+				editor.setReadOnly(true);
 				$.ajax({
 					type: "POST",
 					url: "/compile",
@@ -68,9 +69,13 @@
 					}),
 					success: function(data) {
 						alert(data);
+						$btnCompile.button("reset");
+						editor.setReadOnly(false);
 					},
 					error: function() {
-						alert("Something went wrong, blame Kirby!");
+						alert("Something went wrong, blame bryce!");
+						$btnCompile.button("reset");
+						editor.setReadOnly(false);
 					}
 				});
 			};
@@ -160,7 +165,6 @@
 		</div>
 		<div class="row">
 			<button id="btn-compile" type="button" class="btn btn-primary btn-lg">Compile</button>
-			<button id="btn-show-problem" type="button" class="btn btn-primary btn-lg" data-toggle="model" data-target="myModel">View Problem</button>
 		</div>
 		<div class="row">
 			<div id="editor-container" class="col-md-12">
