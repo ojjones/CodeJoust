@@ -14,6 +14,12 @@ import problem
 current_dir = os.path.abspath('../www')
 current_games = {}
 
+TEAM_INIT_REQ = 0;
+TEAM_INIT_RES = 1;
+TEAM_CODE_UPDATE = 2;
+SCORE_SCREEN_UPDATE = 3;
+SCORE_INIT = 4;
+
 class teamHandler(WebSocket):
     def received_message(self, m):
 
@@ -25,12 +31,12 @@ class teamHandler(WebSocket):
         team_id = m['team_id']
         ty = m['type']
 
-        if ty == 0:
+        if ty == TEAM_INIT_REQ:
             if  "code_session" in current_games[game_id]['teams'][team_id]:
                 code = current_games[game_id]['teams'][team_id]["code_session"]
             else:
                 code = "";
-            tmp = {'type':1,
+            tmp = {'type':TEAM_INIT_RES,
                    'game_id':game_id,
                    'problem_id':current_games[game_id]['problem'],
                    'problem_text':"Hello World",
@@ -40,10 +46,10 @@ class teamHandler(WebSocket):
             self.send(response)
             current_games[game_id]['teams'][team_id]['team_session'] = self
 
-        if ty == 2:
+        if ty == TEAM_CODE_UPDATE:
             code = m['code']
             current_games[game_id]['teams'][team_id]["code_session"] = code
-            tmp = {'type':3,
+            tmp = {'type':SCORE_SCREEN_UPDATE,
                    'team_id':team_id,
                    'code':code
                   }
@@ -66,7 +72,7 @@ class scoreHandler(WebSocket):
         game_id = m['game_id']
         ty = m['type']
 
-        if ty == 4:
+        if ty == SCORE_INIT:
             current_games[game_id]['scoresession'] = self
 
         cherrypy.engine.publish('websocket-broadcast', m)
