@@ -6,6 +6,43 @@
 	<script type="text/javascript">
 		jQuery(function($) {
 
+			if (getParameterByName("game_id") == "")
+				window.location = "/index.html";
+				return;
+			}
+
+			/******************************
+			  Button Event Handlers
+			 ******************************/
+
+			$("#btn-start").click(function(){
+				$.ajax({
+					type: "POST",
+					url: "/setup",
+					contentType: "application/json",
+					dataType: "json",
+					data: JSON.stringify({
+						problem: $("#sel-problem").val()
+					}),
+					success: function(data) {
+						if (data["game_id"] != undefined) {
+							window.location = "/overlord.html?game_id=" + data["game_id"]
+						} else {
+							alert("Invalid response, I blame ojones!");
+						}
+					},
+					error: function() {
+						alert("Something went wrong, I blame ojones!");
+					}
+				});
+			});
+
+			$("#btn-stop").click(function(){
+			});
+
+			$("#btn-drink").click(function(){
+			});
+
 		});
 	</script>
 
@@ -16,17 +53,24 @@
 			padding-bottom: 40px;
 			background-color: #eee;
 		}
+		.btn {
+			margin-top:5px;
+		}
 	</style>
 </head>
 <body>
 
 	<div class="container">
 		<div class="row">
-			<h1>fizzbuzz - Team 1</h1>
+			<h1>I am the OVERLORD!</h1>
+			<h2><span class="problem-title">fizzbuzz</span></h2>
 		</div>
 		<div class="row">
-			<button id="btn-compile" type="button" class="btn btn-primary btn-lg">Compile</button>
-			<button id="btn-show-problem" type="button" class="btn btn-primary btn-lg" data-toggle="model" data-target="myModel">View Problem</button>
+			<button id="btn-start" type="button" class="btn btn-primary btn-lg">Start</button>
+			<button id="btn-stop" type="button" class="btn btn-danger btn-lg">Stop</button>
+		</div>
+		<div class="row">
+			<button id="btn-drink" type="button" class="btn btn-success btn-lg">Drink!</button>
 		</div>
 	</div>
 
