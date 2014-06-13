@@ -85,7 +85,7 @@
 			var editor = ace.edit("editor");
 			editor.setTheme("ace/theme/monokai");
 			editor.getSession().setMode("ace/mode/c_cpp");
-			// editor.setReadOnly(true);
+			editor.setReadOnly(true);
 			editor.getSession().on("change", function(e) {
 				if (ws.readyState == OPEN) {
 					changeCount += 1;

@@ -11,6 +11,7 @@
 	wsapi.START_ID = 5;
 	wsapi.STOP_ID = 6;
 	wsapi.WINNER_ID = 7;
+	wsapi.DRINK_ID = 8;
 
 	wsapi.INIT_REQ = function(gameid, teamid) {
 		return {

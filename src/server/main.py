@@ -19,6 +19,10 @@ TEAM_INIT_RES = 1;
 TEAM_CODE_UPDATE = 2;
 SCORE_SCREEN_UPDATE = 3;
 SCORE_INIT = 4;
+START_ID = 5;
+STOP_ID = 6;
+WINNER_ID = 7;
+DRINK_ID = 8;
 
 class teamHandler(WebSocket):
     def received_message(self, m):
@@ -113,7 +117,7 @@ config = {
         'tools.json_in.on': True,
         'tools.response_headers.on': True,
         'tools.response_headers.headers': [('Content-Type', 'application/json')]
-        }
+        },
     '/team': {
         'tools.websocket.on': True,
         'tools.websocket.handler_cls': teamHandler
@@ -128,14 +132,14 @@ config = {
         'tools.json_in.on': True,
         'tools.response_headers.on': True,
         'tools.response_headers.headers': [('Content-Type', 'application/json')]
-        }
+        },
     '/stop': {
         'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
         'tools.sessions.on': True,
         'tools.json_in.on': True,
         'tools.response_headers.on': True,
         'tools.response_headers.headers': [('Content-Type', 'application/json')]
-        }
+        },
     '/drink': {
         'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
         'tools.sessions.on': True,
@@ -212,6 +216,28 @@ class Root():
             return_val['problem'] = current_games[game_id]["problem"]
 
             return json.dumps(return_val)
+
+        if vpath == 'start':
+            args = cherrypy.request.json
+            game_id = int(args['game_id'])
+
+            tmp = {'type':START_ID}
+            msg = json.dumps(tmp)
+            if 'team_session' in current_games[game_id]['teams'][0]:
+                current_games[game_id]['teams'][0]['team_session'].send(msg)
+            if 'team_session' in current_games[game_id]['teams'][1]:
+                current_games[game_id]['teams'][1]['team_session'].send(msg)
+            
+        if vpath == 'stop':
+            args = cherrypy.request.json
+            game_id = int(args['game_id'])
+
+            tmp = {'type':STOP_ID}
+            msg = json.dumps(tmp)
+            if 'team_session' in current_games[game_id]['teams'][0]:
+                current_games[game_id]['teams'][0]['team_session'].send(msg)
+            if 'team_session' in current_games[game_id]['teams'][1]:
+                current_games[game_id]['teams'][1]['team_session'].send(msg)
 
         return vpath
 

@@ -3,13 +3,15 @@
 <head>
 	<script type="text/javascript" src="js/jquery.js"></script>
 	<script type="text/javascript" src="js/bootstrap.js"></script>
+	<script type="text/javascript" src="js/util.js"></script>
 	<script type="text/javascript">
 		jQuery(function($) {
 
-			if (getParameterByName("game_id") == "")
+                        if (getParameterByName("game_id") == ""){
 				window.location = "/index.html";
 				return;
 			}
+			var game_id = parseInt(getParameterByName("game_id"));
 
 			/******************************
 			  Button Event Handlers
