@@ -7,7 +7,6 @@ import difflib
 import subprocess
 
 # TODO: Use alternate working directory for output
-# TODO: Cleanup binary after use
 # TODO: Not really safe for production
 # TODO: Swap to pretty html table output (needs .css style)
 # TODO: Make actual module, put problem class some place else
@@ -56,6 +55,8 @@ def _validate_output(problem, filename):
 
     success = (len(full_diff_output) == 0)
 
+    os.remove(binary)
+
     return success, full_diff_output
 
     # XXX future pretty output
@@ -74,7 +75,12 @@ def _validate_output(problem, filename):
     '''
     
 
-def validate(filename, problem):
+def validate(filename, problem): 
+    compile_success = False
+    validate_success = False
+    compiler_output = None
+    validation_output = None
+    
     # Step 1: Compile
     (compile_success, compiler_output) = _compile_code(problem, filename)
 
@@ -82,14 +88,18 @@ def validate(filename, problem):
     if compile_success:
         (validate_success, validation_output) = _validate_output(problem, filename)
     
-    return (compile_success, validate_success, validation_output)
+    return (compile_success, compiler_output, validate_success, validation_output)
 
 if __name__ == '__main__':
-    fake_problem = CJoustProblem("sample_input.txt", "sample_output.txt")
-    (compile_success, validate_success, validation_output) = validate("sample.c", fake_problem)
+    fake_problem = CJoustProblem("samples/sample_input.txt", "samples/sample_output.txt")
+    for sample in ["samples/sample1.c", "samples/sample2.c", "samples/sample3.c"]:
+        print "File: %s" % sample
+        (compile_success, compiler_output, validate_success, validation_output) = validate(sample, fake_problem)
 
-    print "Compilation success: %s" % compile_success
-    print "Validation success: %s" % validate_success
-    print "Diff output:"
-    print validation_output
+        print "Compilation success: %s" % compile_success
+        print "Compilation output:"
+        print compiler_output
+        print "Validation success: %s" % validate_success
+        print "Diff output:"
+        print validation_output
     
