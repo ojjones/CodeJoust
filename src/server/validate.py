@@ -5,6 +5,7 @@ Library for compiling and validating small code snippets against a known output
 import os
 import difflib
 import subprocess
+import problem
 
 # TODO: Use alternate working directory for output
 # TODO: Not really safe for production
@@ -91,7 +92,7 @@ def validate(filename, problem):
     return (compile_success, compiler_output, validate_success, validation_output)
 
 if __name__ == '__main__':
-    fake_problem = CJoustProblem("samples/sample_input.txt", "samples/sample_output.txt")
+    fake_problem = problem.CJoustProblem("samples/sample_input.txt", "samples/sample_output.txt")
     for sample in ["samples/sample1.c", "samples/sample2.c", "samples/sample3.c"]:
         print "File: %s" % sample
         (compile_success, compiler_output, validate_success, validation_output) = validate(sample, fake_problem)
