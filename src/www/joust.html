@@ -15,9 +15,6 @@
 			const CLOSING = 2;
 			const CLOSED = 3;
 
-			const START = 1;
-			const STOP = 2;
-
 			if (getParameterByName("game_id") == "" ||
 				getParameterByName("team") == "" ||
 				getParameterByName("problem") == "") {
@@ -107,13 +104,13 @@
 				console.log(data);
 
 				switch(data.type) {
-					case wsapi.INIT_RES_ID:
+					case wsapi.TEAM_INIT_RES_ID:
 						initIOHandler(data);
 						break;
-					case START:
+					case wsapi.START_ID:
 						startIOHandler(data);
 						break;
-					case STOP:
+					case wsapi.STOP_ID:
 						stopIOHandler(data);
 						break;
 					default:

@@ -29,7 +29,7 @@
                 data = JSON.parse(e.data);
                 console.log("Fucker");
                 switch(data.type) {
-                    case wsapi.EDITOR_UPDATE:
+                    case wsapi.SCORE_EDITOR_UPDATE_ID:
                         switch(data.team_id)
                         {
                             case 0:
@@ -48,7 +48,7 @@
             };
 
             ws.onopen = function() {
-                var msg = JSON.stringify(wsapi.INIT_SCORE(game_id, -1));
+                var msg = JSON.stringify(wsapi.SCORE_INIT(game_id, -1));
                 console.log("Sending msg: " + msg);
                 ws.send(msg);
             };

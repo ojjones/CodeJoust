@@ -16,7 +16,7 @@
 					}),
 					success: function(data) {
 						if (data["game_id"] != undefined) {
-							window.location = "/overlord.html?gameid=" + data["game_id"]
+							window.location = "/overlord.html?game_id=" + data["game_id"]
 						} else {
 							alert("Invalid response, I blame ojones!");
 						}
