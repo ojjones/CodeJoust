@@ -42,9 +42,11 @@
 			};
 
 			startIOHandler = function(e) {
+				editor.setReadOnly(false);
 			};
 
 			stopIOHandler = function(e) {
+				editor.setReadOnly(true);
 			};
 
 			/******************************
@@ -83,6 +85,7 @@
 			var editor = ace.edit("editor");
 			editor.setTheme("ace/theme/monokai");
 			editor.getSession().setMode("ace/mode/c_cpp");
+			// editor.setReadOnly(true);
 			editor.getSession().on("change", function(e) {
 				if (ws.readyState == OPEN) {
 					changeCount += 1;
@@ -113,6 +116,10 @@
 					case wsapi.STOP_ID:
 						stopIOHandler(data);
 						break;
+					case wsapi.WINER_ID:
+						editor.setReadOnly(true);
+						alert(data);
+						editor.setReadOnly(false);
 					default:
 						console.log(data);
 
