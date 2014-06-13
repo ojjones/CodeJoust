@@ -25,7 +25,7 @@ class teamHandler(WebSocket):
         team_id = m['team_id']
         ty = m['type']
 
-        if type == 0:
+        if ty == 0:
             current_games[game_id][team_id]['team_session'] = self
             tmp = {'type':1,
                    'game_id':game_id,
@@ -36,7 +36,7 @@ class teamHandler(WebSocket):
             response = json.dumps(tmp)
             self.send(response)
 
-        if type == 2:
+        if ty == 2:
             code = m['code']
 
     def closed(self, code, reason="A client left the room without a proper explanation."):
