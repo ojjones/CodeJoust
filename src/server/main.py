@@ -167,7 +167,7 @@ class Root():
             text_file.write(contents)
             text_file.close()
 
-            return validate.validate(str(game_id) + "." + str(team) + ".c", problem.CJoustProblem(current_games[game_id]["problem"]))
+            return json.dumps(validate.validate(str(game_id) + "." + str(team) + ".c", problem.CJoustProblem(current_games[game_id]["problem"])))
 
         if vpath == "join":
             args = cherrypy.request.json
