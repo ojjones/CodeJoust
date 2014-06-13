@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/bootstrap.js"></script>
+    <script type="text/javascript" src="js/wsapi.js"></script>
+    <script type="text/javascript" src="js/util.js"></script>
+    <script src="ace/build/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        jQuery(function($) {
+            var editor_team_0 = ace.edit("editor_team_0");
+            editor_team_0.setTheme("ace/theme/monokai");
+            editor_team_0.getSession().setMode("ace/mode/c_cpp");
+            editor_team_0.setReadOnly(true);
+
+            var editor_team_1 = ace.edit("editor_team_1");
+            editor_team_1.setTheme("ace/theme/monokai");
+            editor_team_1.getSession().setMode("ace/mode/c_cpp");
+            editor_team_1.setReadOnly(true);
+        });
+    </script>
+
+    <link rel="stylesheet" href="css/bootstrap.css" />
+
+    <style type="text/css">
+        body {
+            padding-top: 20px;
+            padding-bottom: 40px;
+            background-color: #eee;
+        }
+
+        .editor-container {
+            height: 800px;
+        }
+
+        .editor {
+            margin: 5px 0 0;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            font-size:24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="row">
+        <div class="col-md-5">
+            <p style="text-align:center">
+                <font size="22">Team 0 Score: 0</font>
+            </p>
+        </div>
+        <div class ="col-md-2"></div>
+        <div class = "col-md-5">
+            <p style="text-align:center">
+                <font size="22">Team 1 Score: 0</font>
+            </p>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="editor-container">
+            <div class="editor" id="editor_team_0"></div>
+        </div>
+    </div>
+    <div class="col-md-2"></div>
+    <div class="col-md-5">
+        <div class="editor-container">
+            <div class="editor" id="editor_team_1"></div>
+        </div>
+    </div>
+</body>
+</html>
