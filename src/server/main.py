@@ -9,6 +9,7 @@ from ws4py.server.cherrypyserver import WebSocketPlugin, WebSocketTool
 
 from ws4py.messaging import TextMessage
 import validate
+import problem
 
 current_dir = os.path.abspath('../www')
 current_games = {}
@@ -106,7 +107,10 @@ class Root():
         cherrypy.log("Handler created: %s" % repr(cherrypy.request.ws_handler))
 
     @cherrypy.tools.accept(media='text/plain')
-    def GET(self):
+    def GET(self): # hopefully this works
+        if vpath == 'problems':
+            return problem.list_problems()
+
         return cherrypy.session['mystring']
 
     @cherrypy.tools.json_in()
