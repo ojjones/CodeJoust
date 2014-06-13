@@ -62,7 +62,6 @@ class teamHandler(WebSocket):
                 current_games[game_id]['scoresession'].send(msg)
 
 
-
     def closed(self, code, reason="A client left the room without a proper explanation."):
         cherrypy.engine.publish('websocket-broadcast', TextMessage(reason))
 
@@ -77,11 +76,27 @@ class scoreHandler(WebSocket):
 
         if ty == SCORE_INIT:
             current_games[game_id]['scoresession'] = self
+            if "code_session" in current_games[game_id]["teams"][0]:
+                tmp = {'type':SCORE_SCREEN_UPDATE,
+                       'team_id':0,
+                       'code':current_games[game_id]['teams'][0]["code_session"]
+                      }
+                msg = json.dumps(tmp)
+                self.send(msg)
+            if "code_session" in current_games[game_id]["teams"][1]:
+                tmp = {'type':SCORE_SCREEN_UPDATE,
+                       'team_id':1,
+                       'code':current_games[game_id]['teams'][1]["code_session"]
+                       }
+                msg = json.dumps(tmp)
+                self.send(msg)
 
         cherrypy.engine.publish('websocket-broadcast', m)
 
-    def closed(self, code, reason=""):
-        del current_games[game_id]['scoresession']
+    def closed(self, code, reason="A client left the room without a proper explanation."):
+        for i in current_games:
+            if current_games[i]['scoresession'] == self:
+                del current_games[i]['scoresession']
 
 config = {
     '/': {
