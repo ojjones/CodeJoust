@@ -17,16 +17,15 @@ current_games = {}
 class teamHandler(WebSocket):
     def received_message(self, m):
 
-        m = json.loads(str(m))
         print 'Hello\n'
         print m
+        m = json.loads(str(m))
 
         game_id = m['game_id']
         team_id = m['team_id']
         ty = m['type']
 
         if ty == 0:
-            current_games[game_id][team_id]['team_session'] = self
             tmp = {'type':1,
                    'game_id':game_id,
                    'problem_id':current_games[game_id]['problem'],
@@ -35,6 +34,7 @@ class teamHandler(WebSocket):
                   }
             response = json.dumps(tmp)
             self.send(response)
+            current_games[game_id][team_id]['team_session'] = self
 
         if ty == 2:
             code = m['code']
