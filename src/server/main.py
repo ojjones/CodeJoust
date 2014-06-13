@@ -81,7 +81,7 @@ class scoreHandler(WebSocket):
 
         cherrypy.engine.publish('websocket-broadcast', m)
 
-    def closed(self):
+    def closed(self, code, reason=""):
         del current_games[game_id]['scoresession']
 
 config = {
