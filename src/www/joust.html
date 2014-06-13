@@ -16,7 +16,11 @@
 			$divProblemText = $("#div-problem-text");
 
 			if (getParameterByName("problem") != undefined) {
-				$(".problem-title").val(getParameterByName("problem"));
+				$(".problem-title").text(getParameterByName("problem"));
+			}
+
+			if (getParameterByName("team") != undefined) {
+				$(".team-id").text(getParameterByName("team"));
 			}
 
 			/******************************
@@ -24,7 +28,7 @@
 			 ******************************/
 
 			initIOHandler = function(e) {
-				$divProblemText.val(e.problem_text);
+				$divProblemText.text(e.problem_text);
 				editor.setValue(e.code_session);
 			};
 
@@ -58,7 +62,7 @@
 				console.log(data);
 
 				switch(data.type) {
-					case INIT:
+					case wsapi.INIT_RES_ID:
 						initIOHandler(data);
 						break;
 					case START:
@@ -74,7 +78,8 @@
 			};
 
 			ws.onopen = function() {
-				msg = JSON.stringify(wsapi.INIT_REQ(parseInt(getParameterByName("game_id"))));
+				msg = JSON.stringify(wsapi.INIT_REQ(parseInt(getParameterByName("game_id")),
+													parseInt(getParameterByName("team_id"))));
 				console.log("Sending msg: " + msg);
 				ws.send(msg);
 			};
@@ -112,7 +117,7 @@
 
 	<div class="container">
 		<div class="row">
-			<h1><span class="problem-title">fizzbuzz</span> - Team 1</h1>
+			<h1><span class="problem-title">fizzbuzz</span> - Team <span class="team-id"></span></h1>
 		</div>
 		<div class="row">
 			<button id="btn-compile" type="button" class="btn btn-primary btn-lg">Compile</button>

@@ -20,7 +20,7 @@ class teamHandler(WebSocket):
         print 'Hello\n'
         print m
 
-        game_id = m['game_id']
+        game_id = int(m['game_id'])
 
         tmp = {'type':1,
                'game_id':game_id,
@@ -129,7 +129,7 @@ class Root():
             return_val = {}
             return_val['team'] = team
             return_val['game_id'] = game_id
-            return_val['problem'] = current_games[game_id]["Problem"]
+            return_val['problem'] = current_games[game_id]["problem"]
 
             return json.dumps(return_val)
 
