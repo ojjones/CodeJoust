@@ -31,6 +31,9 @@ class CJoustProblem(JoustProblem):
 def _pretty_output(output):
     return output.rstrip('\n').split('\n')
 
+def _pretty_file(filename):
+    return [line.rstrip('\n') for line in open(filename, 'r')]
+
 def _compile_code(problem, filename):
     # JDR: Use a gcc python plugin?
     
@@ -55,9 +58,9 @@ def _validate_output(problem, filename):
                                        stdin=subprocess.PIPE,
                                        stdout=subprocess.PIPE,
                                        stderr=subprocess.PIPE)
-    full_output = problem_process.communicate(problem.reference_input)
+    full_output = problem_process.communicate(open(problem.reference_input, 'r').read())
     problem_output = _pretty_output(full_output[0])
-    valid_output = _pretty_output(problem.reference_output)
+    valid_output = _pretty_file(problem.reference_output)
 
     # XXX temp ugly output
     raw_diff_output = difflib.unified_diff(problem_output, valid_output)
@@ -97,7 +100,7 @@ def validate(filename, problem):
     return (compile_success, validate_success, validation_output)
 
 if __name__ == '__main__':
-    fake_problem = CJoustProblem("", "abc\ndef\nghi")
+    fake_problem = CJoustProblem("sample_input.txt", "sample_output.txt")
     (compile_success, validate_success, validation_output) = validate("sample.c", fake_problem)
 
     print "Compilation success: %s" % compile_success
