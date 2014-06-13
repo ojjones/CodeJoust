@@ -100,14 +100,6 @@ config = {
         'tools.response_headers.on': True,
         'tools.response_headers.headers': [('Content-Type', 'application/json')]
         },
-    '/team': {
-        'tools.websocket.on': True,
-        'tools.websocket.handler_cls': teamHandler
-        },
-    '/score': {
-        'tools.websocket.on': True,
-        'tools.websocket.handler_cls': scoreHandler
-        },
     '/join': {
         'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
         'tools.sessions.on': True,
@@ -116,6 +108,35 @@ config = {
         'tools.response_headers.headers': [('Content-Type', 'application/json')]
         },
     '/compile': {
+        'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
+        'tools.sessions.on': True,
+        'tools.json_in.on': True,
+        'tools.response_headers.on': True,
+        'tools.response_headers.headers': [('Content-Type', 'application/json')]
+        }
+    '/team': {
+        'tools.websocket.on': True,
+        'tools.websocket.handler_cls': teamHandler
+        },
+    '/score': {
+        'tools.websocket.on': True,
+        'tools.websocket.handler_cls': scoreHandler
+        },
+    '/start': {
+        'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
+        'tools.sessions.on': True,
+        'tools.json_in.on': True,
+        'tools.response_headers.on': True,
+        'tools.response_headers.headers': [('Content-Type', 'application/json')]
+        }
+    '/stop': {
+        'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
+        'tools.sessions.on': True,
+        'tools.json_in.on': True,
+        'tools.response_headers.on': True,
+        'tools.response_headers.headers': [('Content-Type', 'application/json')]
+        }
+    '/drink': {
         'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
         'tools.sessions.on': True,
         'tools.json_in.on': True,
