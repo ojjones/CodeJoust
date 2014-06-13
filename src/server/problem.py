@@ -15,7 +15,7 @@ class JoustProblem:
         for fol in dirs:
             numProblems += 1
             with open(path+fol+'/description', 'r') as f:
-                first_line = f.readline()
+                first_line = f.readlines()
             problems[fol] = first_line
         return problems, numProblems
 
