@@ -63,6 +63,13 @@ config = {
         'tools.staticdir.dir' : current_dir,
         'tools.staticdir.index' : 'index.html',
         },
+    '/problems': {
+        'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
+        'tools.sessions.on': True,
+        'tools.json_in.on': True,
+        'tools.response_headers.on': True,
+        'tools.response_headers.headers': [('Content-Type', 'application/json')]
+        },
     '/setup': {
         'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
         'tools.sessions.on': True,
