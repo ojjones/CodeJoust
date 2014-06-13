@@ -16,11 +16,14 @@
 						game_id: $("#tbx-game-id").val()
 					}),
 					success: function(data) {
-						if (data["team"] != undefined &&
-							data["game_id"] != undefined &&
-							data["problem"] != undefined) {
-							window.location = "/joust.html?team="
-								+ data["team"] + "&game_id=" + data["game_id"]
+                                                if (data["team"] == -1) {
+                                                        alert("Only Two Teams Allowed Per Game");
+                                                }
+						else if (data["team"] != undefined &&
+							 data["game_id"] != undefined &&
+							 data["problem"] != undefined) {
+							        window.location = "/joust.html?team="
+                                                                + data["team"] + "&game_id=" + data["game_id"]
 								+ "&problem=" + data["problem"]
 						}
 						else {
