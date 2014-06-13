@@ -114,11 +114,12 @@ class Root():
         cherrypy.log("Handler created: %s" % repr(cherrypy.request.ws_handler))
 
     @cherrypy.tools.accept(media='text/plain')
-    def GET(self): # hopefully this works
+    def GET(self, vpath): # hopefully this works
         if vpath == 'problems':
-            return problem.list_problems()
+             problems = problem.list_problems()
+             return json.dumps(problems)
 
-        return cherrypy.session['mystring']
+        return "Nothing here for you"
 
     @cherrypy.tools.json_in()
     def POST(self, vpath):

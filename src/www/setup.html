@@ -27,6 +27,21 @@
 				});
 			});
 
+                        $.ajax({
+                                type: "GET",
+                                url: "/problems",
+				dataType: "json",
+                                success: function(data) {
+                                        if (data["problems"] != undefined) {
+                                                var problems = data["problems"]
+                                        } else {
+                                                alert("Invalid response, I blame ojones!");
+                                        }
+                                },
+                                error: function() {
+                                        alert("Something went wrong, I blame ojones!");
+                                }
+                         });
 		});
 	</script>
 
