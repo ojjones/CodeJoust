@@ -5,9 +5,20 @@ def list_problems():
     path = "../problems/"
     dirs = os.listdir(path)
     for fol in dirs:
-        with open(path+fol+'/description', 'r') as f:
-            problems[fol] = "\n".join(f.readlines())
+        tmp = path+fol
+        if os.path.isdir(tmp):
+            with open(tmp+'/description', 'r') as f:
+                problems[fol] = "\n".join(f.readlines())
     return problems
+
+def get_problem(problem):
+
+    path = "../problems/"+problem
+    with open(path+'/description', 'r') as f:
+        description = "\n".join(f.readlines())
+    with open(path+'/template.c', 'r') as f:
+        template = "\n".join(f.readlines())
+    return description, template
 
 class JoustProblem:
     def __init__(self, problem_name):

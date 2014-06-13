@@ -27,8 +27,6 @@ DRINK_ID = 8;
 class teamHandler(WebSocket):
     def received_message(self, m):
 
-        print 'Hello\n'
-        print m
         m = json.loads(str(m))
 
         game_id = m['game_id']
@@ -36,14 +34,15 @@ class teamHandler(WebSocket):
         ty = m['type']
 
         if ty == TEAM_INIT_REQ:
+            description, template = problem.get_problem(current_games[game_id]['problem'])
             if  "code_session" in current_games[game_id]['teams'][team_id]:
                 code = current_games[game_id]['teams'][team_id]["code_session"]
             else:
-                code = "";
+                code = template;
             tmp = {'type':TEAM_INIT_RES,
                    'game_id':game_id,
                    'problem_id':current_games[game_id]['problem'],
-                   'problem_text':"Hello World",
+                   'problem_text': description,
                    'code_session': code
                   }
             response = json.dumps(tmp)
