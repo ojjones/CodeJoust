@@ -10,9 +10,10 @@ def list_problems():
     return problems
 
 class JoustProblem:
-    def __init__(self, reference_input, reference_output):
-        self.reference_input = reference_input
-        self.reference_output = reference_output
+    def __init__(self, problem_name):
+        # XXXJDR make this cleaner, secure, etc...
+        self.reference_input = "../problems/%s/sample_input" % problem_name
+        self.reference_input = "../problems/%s/sample_output" % problem_name
     def make_compile_cmd(self, filename):
         return
     def make_binary_name(self, filename):

@@ -144,8 +144,8 @@ class Root():
         if vpath == 'setup':
             tmpGameId = self.game_id
             self.game_id += 1
-            problem = cherrypy.request.json
-            current_games[tmpGameId] = {'problem':problem['problem']}
+            _problem = cherrypy.request.json
+            current_games[tmpGameId] = {'problem':_problem['problem']}
             current_games[tmpGameId]['teams'] = []
             current_games[tmpGameId]['teams'].append({})
             current_games[tmpGameId]['teams'].append({})
@@ -161,7 +161,8 @@ class Root():
             text_file.write(contents)
             text_file.close()
 
-            return validate(str(game_id) + "." + str(team) + ".c")
+	    import pdb; pdb.set_trace()
+            return validate.validate(str(game_id) + "." + str(team) + ".c", problem.CJoustProblem(current_games[game_id]["problem"]))
 
         if vpath == "join":
             args = cherrypy.request.json
