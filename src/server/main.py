@@ -20,22 +20,37 @@ class teamHandler(WebSocket):
         print 'Hello\n'
         print m
 
-        game_id = int(m['game_id'])
+        game_id = m['game_id']
+        team_id = m['team_id']
+        ty = m['type']
 
-        tmp = {'type':1,
-               'game_id':game_id,
-               'problem_id':current_games[game_id]['problem'],
-               'problem_text':"Hello World",
-               'code_session':"int main(void)"
-              }
-        response = json.dumps(tmp)
-        self.send(response)
+        if type == 0:
+            current_games[game_id][team_id]['team_session'] = self
+            tmp = {'type':1,
+                   'game_id':game_id,
+                   'problem_id':current_games[game_id]['problem'],
+                   'problem_text':"Hello World",
+                   'code_session':"int main(void)"
+                  }
+            response = json.dumps(tmp)
+            self.send(response)
+
+        if type == 2:
+            code = m['code']
 
     def closed(self, code, reason="A client left the room without a proper explanation."):
         cherrypy.engine.publish('websocket-broadcast', TextMessage(reason))
 
-class screenHandler(WebSocket):
+class scoreHandler(WebSocket):
+
     def received_message(self, m):
+
+        game_id = m['game_id']
+        ty = m['type']
+
+        if type == 0:
+            current_games[game_id]['scoresession'] = self
+
         cherrypy.engine.publish('websocket-broadcast', m)
 
     def closed(self, code, reason="A client left the room without a proper explanation."):
@@ -58,9 +73,9 @@ config = {
         'tools.websocket.on': True,
         'tools.websocket.handler_cls': teamHandler
         },
-    '/screen': {
+    '/score': {
         'tools.websocket.on': True,
-        'tools.websocket.handler_cls': screenHandler
+        'tools.websocket.handler_cls': scoreHandler
         },
     '/join': {
         'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
@@ -87,7 +102,7 @@ class Root():
         cherrypy.log("Handler created: %s" % repr(cherrypy.request.ws_handler))
 
     @cherrypy.expose
-    def screen(self):
+    def score(self):
         cherrypy.log("Handler created: %s" % repr(cherrypy.request.ws_handler))
 
     @cherrypy.tools.accept(media='text/plain')
