@@ -18,29 +18,49 @@
 			$("#btn-start").click(function(){
 				$.ajax({
 					type: "POST",
-					url: "/setup",
+					url: "/start",
 					contentType: "application/json",
 					dataType: "json",
 					data: JSON.stringify({
-						problem: $("#sel-problem").val()
+						game_id: game_id
 					}),
 					success: function(data) {
-						if (data["game_id"] != undefined) {
-							window.location = "/overlord.html?game_id=" + data["game_id"]
-						} else {
-							alert("Invalid response, I blame ojones!");
-						}
 					},
 					error: function() {
-						alert("Something went wrong, I blame ojones!");
 					}
 				});
 			});
 
 			$("#btn-stop").click(function(){
+				$.ajax({
+					type: "POST",
+					url: "/stop",
+					contentType: "application/json",
+					dataType: "json",
+					data: JSON.stringify({
+						game_id: game_id
+					}),
+					success: function(data) {
+					},
+					error: function() {
+					}
+				});
 			});
 
 			$("#btn-drink").click(function(){
+				$.ajax({
+					type: "POST",
+					url: "/stop",
+					contentType: "application/json",
+					dataType: "json",
+					data: JSON.stringify({
+						game_id: game_id
+					}),
+					success: function(data) {
+					},
+					error: function() {
+					}
+				});
 			});
 
 		});
