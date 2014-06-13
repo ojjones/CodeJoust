@@ -27,17 +27,22 @@ class teamHandler(WebSocket):
 
         if ty == 0:
             current_games[game_id][team_id]['team_session'] = self
+            if "code_session" in current_games[game_id][team_id]:
+                code = current_games[game_id][team_id]["code_session"]
+            else:
+                code = "";
             tmp = {'type':1,
                    'game_id':game_id,
                    'problem_id':current_games[game_id]['problem'],
                    'problem_text':"Hello World",
-                   'code_session':"int main(void)"
+                   'code_session': code
                   }
             response = json.dumps(tmp)
             self.send(response)
 
         if ty == 2:
             code = m['code']
+            current_games[game_id][team_id]["code_session"] = code
 
     def closed(self, code, reason="A client left the room without a proper explanation."):
         cherrypy.engine.publish('websocket-broadcast', TextMessage(reason))
