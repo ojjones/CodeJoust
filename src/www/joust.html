@@ -15,6 +15,11 @@
 			const CLOSING = 2;
 			const CLOSED = 3;
 
+			const STATE_STOPPED = 0;
+			const STATE_STARTED = 1;
+
+			var STATE = STATE_STOPPED;
+
 			if (getParameterByName("game_id") == "" ||
 				getParameterByName("team") == "" ||
 				getParameterByName("problem") == "") {
@@ -43,10 +48,14 @@
 
 			startIOHandler = function(e) {
 				editor.setReadOnly(false);
+				STATE = STATE_STARTED;
+				$(".current-state").text("STARTED").removeClass("alert-danger").addClass("alert-success");
 			};
 
 			stopIOHandler = function(e) {
 				editor.setReadOnly(true);
+				STATE = STATE_STOPPED;
+				$(".current-state").text("STOPPED").removeClass("alert-success").addClass("alert-danger");
 			};
 
 			/******************************
@@ -54,6 +63,10 @@
 			 ******************************/
 
 			compileBtnHandler = function() {
+				if (STATE != STATE_STARTED) {
+					return;
+				}
+
 				$btnCompile.button("loading");
 				editor.setReadOnly(true);
 				$.ajax({
@@ -69,12 +82,16 @@
 					success: function(data) {
 						alert(data);
 						$btnCompile.button("reset");
-						editor.setReadOnly(false);
+						if (STATE == STATE_STARTED) {
+							editor.setReadOnly(false);
+						}
 					},
 					error: function() {
 						alert("Something went wrong, blame bryce!");
 						$btnCompile.button("reset");
-						editor.setReadOnly(false);
+						if (STATE == STATE_STARTED) {
+							editor.setReadOnly(false);
+						}
 					}
 				});
 			};
@@ -169,7 +186,12 @@
 			<h1><span class="problem-title">fizzbuzz</span> - Team <span class="team-id"></span></h1>
 		</div>
 		<div class="row">
-			<button id="btn-compile" type="button" class="btn btn-primary btn-lg">Compile</button>
+			<div class="col-md-8">
+				<button id="btn-compile" type="button" class="btn btn-primary btn-lg">Compile</button>
+			</div>
+			<div class="col-md-4">
+				<div class="current-state alert alert-danger">STOPPED</div>
+			</div>
 		</div>
 		<div class="row">
 			<div id="editor-container" class="col-md-12">
