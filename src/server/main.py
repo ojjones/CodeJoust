@@ -17,6 +17,8 @@ class teamHandler(WebSocket):
     def received_message(self, m):
 
         m = json.loads(str(m))
+        print 'Hello\n'
+        print m
 
         game_id = m['game_id']
 
@@ -98,7 +100,7 @@ class Root():
             tmpGameId = self.game_id
             self.game_id += 1
             problem = cherrypy.request.json
-            current_games[tmpGameId] = {'Problem':problem['problem']}
+            current_games[tmpGameId] = {'problem':problem['problem']}
             current_games[tmpGameId]['team'] = 0
             print current_games
             return json.dumps({'game_id':tmpGameId})

@@ -13,11 +13,10 @@
 			const STOP = 2;
 
 			$btnCompile = $("#btn-complile");
-			$spanProblemTitle = $("#span-problem-title");
 			$divProblemText = $("#div-problem-text");
 
 			if (getParameterByName("problem") != undefined) {
-				$spanProblemTitle.val(getParameterByName("problem"));
+				$(".problem-title").val(getParameterByName("problem"));
 			}
 
 			/******************************
@@ -75,7 +74,7 @@
 			};
 
 			ws.onopen = function() {
-				msg = JSON.stringify(wsapi.INIT_REQ(parseInt(getParameterByName("gameid"))));
+				msg = JSON.stringify(wsapi.INIT_REQ(parseInt(getParameterByName("game_id"))));
 				console.log("Sending msg: " + msg);
 				ws.send(msg);
 			};
@@ -113,7 +112,7 @@
 
 	<div class="container">
 		<div class="row">
-			<h1>fizzbuzz - Team 1</h1>
+			<h1><span class="problem-title">fizzbuzz</span> - Team 1</h1>
 		</div>
 		<div class="row">
 			<button id="btn-compile" type="button" class="btn btn-primary btn-lg">Compile</button>
@@ -126,7 +125,7 @@
 		</div>
 			<div class="clearfix"></div>
 		<div class="row">
-			<h2>Problem: <span id="span-problem-title">fizzbuzz<a/></h2>
+			<h2>Problem: <span class="problem-title">fizzbuzz<a/></h2>
 			<div id="div-problem-text">
 				<p>Write a program that prints the numbers from 1 to 100. But for multiples of three print 'Fizz' instead of the number and for the multiples of five print 'Buzz'. For numbers which are multiples of both three and five print 'FizzBuzz'.</p>
 			</div>
