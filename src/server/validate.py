@@ -38,7 +38,7 @@ def _compile_code(cur_problem, filename):
     return (success, compiler_output)
 
 def _validate_output(cur_problem, filename):
-    binary = problem.make_binary_name(filename)
+    binary = cur_problem.make_binary_name(filename)
     problem_process = subprocess.Popen("./"+binary, shell=True,
                                        stdin=subprocess.PIPE,
                                        stdout=subprocess.PIPE,
