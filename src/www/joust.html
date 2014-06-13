@@ -8,20 +8,32 @@
 	<script src="ace/build/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript">
 		jQuery(function($) {
-			const INIT = 0;
+
+			/* Web Socket State Constants */
+			const CONNECTING = 0;
+			const OPEN = 1;
+			const CLOSING = 2;
+			const CLOSED = 3;
+
 			const START = 1;
 			const STOP = 2;
+
+			if (getParameterByName("game_id") == "" ||
+				getParameterByName("team") == "" ||
+				getParameterByName("problem") == "") {
+				window.location = "/index.html";
+				return;
+			}
+
+			var game_id = parseInt(getParameterByName("game_id"));
+			var team = parseInt(getParameterByName("team"));
+			var problem = getParameterByName("problem");
 
 			$btnCompile = $("#btn-complile");
 			$divProblemText = $("#div-problem-text");
 
-			if (getParameterByName("problem") != undefined) {
-				$(".problem-title").text(getParameterByName("problem"));
-			}
-
-			if (getParameterByName("team") != undefined) {
-				$(".team-id").text(getParameterByName("team"));
-			}
+			$(".team-id").text(team);
+			$(".problem-title").text(problem);
 
 			/******************************
 			  IO Event Handlers
@@ -48,9 +60,20 @@
 
 			$btnCompile.click(compileBtnHandler);
 
+			var changeCount = 0;
 			var editor = ace.edit("editor");
 			editor.setTheme("ace/theme/monokai");
 			editor.getSession().setMode("ace/mode/c_cpp");
+			editor.getSession().on("change", function(e) {
+				if (ws.readyState == OPEN) {
+					changeCount += 1;
+					if (changeCount % 5) {
+						changeCount = 0;
+						var msg = JSON.stringify(wsapi.TEAM_CODE_PUSH(game_id, team, editor.getValue()));
+						ws.send(msg);
+					}
+				}
+			});
 
 			var ws = new WebSocket("ws://localhost:8080/team");
 
@@ -78,8 +101,7 @@
 			};
 
 			ws.onopen = function() {
-				msg = JSON.stringify(wsapi.INIT_REQ(parseInt(getParameterByName("game_id")),
-													parseInt(getParameterByName("team_id"))));
+				var msg = JSON.stringify(wsapi.INIT_REQ(game_id, team_id));
 				console.log("Sending msg: " + msg);
 				ws.send(msg);
 			};
