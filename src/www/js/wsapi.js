@@ -10,11 +10,20 @@
 
 	wsapi.EDITOR_UPDATE = 3;
 
+	wsapi.SCORE_INIT = 4;
+
 	wsapi.INIT_REQ = function(gameid, teamid) {
 		return {
 			type: wsapi.INIT_REQ_ID,
 			game_id: gameid,
 			team_id: teamid
+		};
+	};
+
+	wsapi.INIT_SCORE = function(gameid, teamid) {
+		return {
+			type: wsapi.SCORE_INIT,
+			game_id: gameid,
 		};
 	};
 

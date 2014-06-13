@@ -89,7 +89,7 @@
 			editor.getSession().on("change", function(e) {
 				if (ws.readyState == OPEN) {
 					changeCount += 1;
-					if (changeCount % 5 == 0) {
+					if (changeCount % 1 == 0) {
 						changeCount = 0;
 						var msg = JSON.stringify(wsapi.TEAM_CODE_PUSH(game_id, team_id, editor.getValue()));
 						ws.send(msg);

@@ -43,6 +43,16 @@ class teamHandler(WebSocket):
         if ty == 2:
             code = m['code']
             current_games[game_id]['teams'][team_id]["code_session"] = code
+            tmp = {'type':3,
+                   'team_id':team_id,
+                   'code':code
+                  }
+            if "scoresession" in current_games[game_id]:
+                print code
+                msg = json.dumps(tmp)
+                current_games[game_id]['scoresession'].send(msg)
+
+
 
     def closed(self, code, reason="A client left the room without a proper explanation."):
         cherrypy.engine.publish('websocket-broadcast', TextMessage(reason))
@@ -51,16 +61,18 @@ class scoreHandler(WebSocket):
 
     def received_message(self, m):
 
+        m = json.loads(str(m))
+
         game_id = m['game_id']
         ty = m['type']
 
-        if type == 0:
+        if ty == 4:
             current_games[game_id]['scoresession'] = self
 
         cherrypy.engine.publish('websocket-broadcast', m)
 
-    def closed(self, code, reason="A client left the room without a proper explanation."):
-        cherrypy.engine.publish('websocket-broadcast', TextMessage(reason))
+    def closed(self):
+        del current_games[game_id]['scoresession']
 
 config = {
     '/': {
@@ -174,12 +186,6 @@ class Root():
             return json.dumps(return_val)
 
         return vpath
-
-    def PUT(self, another_string):
-        cherrypy.session['mystring'] = another_string
-
-    def DELETE(self):
-        cherrypy.session.pop('mystring', None)
 
 if __name__ == '__main__':
     cherrypy.config.update({
