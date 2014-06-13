@@ -5,12 +5,12 @@
 
 	wsapi.INIT_REQ_ID = 0;
 	wsapi.INIT_RES_ID = 1;
-
 	wsapi.TEAM_CODE_PUSH_ID = 2;
-
 	wsapi.EDITOR_UPDATE = 3;
-
 	wsapi.SCORE_INIT = 4;
+	wsapi.START = 5;
+	wsapi.STOP = 6;
+	wsapi.WINNER = 7;
 
 	wsapi.INIT_REQ = function(gameid, teamid) {
 		return {

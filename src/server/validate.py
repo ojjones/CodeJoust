@@ -19,11 +19,11 @@ def _pretty_output(output):
 def _pretty_file(filename):
     return [line.rstrip('\n') for line in open(filename, 'r')]
 
-def _compile_code(problem, filename):
+def _compile_code(cur_problem, filename):
     # JDR: Use a gcc python plugin?
     
     # XXX don't use shell=True in production...
-    compiler_process = subprocess.Popen(problem.make_compile_cmd(filename),
+    compiler_process = subprocess.Popen(cur_problem.make_compile_cmd(filename),
                                         shell=True,
                                         stdout=subprocess.PIPE,
                                         stderr=subprocess.PIPE)
@@ -37,15 +37,15 @@ def _compile_code(problem, filename):
     
     return (success, compiler_output)
 
-def _validate_output(problem, filename):
+def _validate_output(cur_problem, filename):
     binary = problem.make_binary_name(filename)
     problem_process = subprocess.Popen("./"+binary, shell=True,
                                        stdin=subprocess.PIPE,
                                        stdout=subprocess.PIPE,
                                        stderr=subprocess.PIPE)
-    full_output = problem_process.communicate(open(problem.reference_input, 'r').read())
+    full_output = problem_process.communicate(open(cur_problem.reference_input, 'r').read())
     problem_output = _pretty_output(full_output[0])
-    valid_output = _pretty_file(problem.reference_output)
+    valid_output = _pretty_file(cur_problem.reference_output)
 
     # XXX temp ugly output
     raw_diff_output = difflib.unified_diff(problem_output, valid_output)
@@ -76,18 +76,18 @@ def _validate_output(problem, filename):
     '''
     
 
-def validate(filename, problem): 
+def validate(filename, cur_problem): 
     compile_success = False
     validate_success = False
     compiler_output = None
     validation_output = None
     
     # Step 1: Compile
-    (compile_success, compiler_output) = _compile_code(problem, filename)
+    (compile_success, compiler_output) = _compile_code(cur_problem, filename)
 
     # Step 2: Validate
     if compile_success:
-        (validate_success, validation_output) = _validate_output(problem, filename)
+        (validate_success, validation_output) = _validate_output(cur_problem, filename)
     
     return (compile_success, compiler_output, validate_success, validation_output)
 
