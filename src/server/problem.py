@@ -16,8 +16,14 @@ def get_problem(problem):
     path = "../problems/"+problem
     with open(path+'/description', 'r') as f:
         description = "\n".join(f.readlines())
-    with open(path+'/template.c', 'r') as f:
-        template = "\n".join(f.readlines())
+
+    templatePath = path+'/template.c'
+    if os.path.isfile(templatePath):
+        with open(templatePath, 'r') as f:
+            template = "\n".join(f.readlines())
+    else:
+        template = ""
+
     return description, template
 
 class JoustProblem:
