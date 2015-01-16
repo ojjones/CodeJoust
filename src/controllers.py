@@ -107,7 +107,7 @@ class GameSocketHandler(BaseWebSocketHandler):
         gameid = str(data["gameid"])
         playerid = int(data["playerid"])
         try:
-            games.get_games(gameid).get_player(playerid)
+            games.get_game(gameid).get_player(playerid)
         except Exception as err:
             raise Exception("Invalid init values: %s" % err.message)
 
