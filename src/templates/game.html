@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block js %}
+jQuery(document).ready(function($) {
+
+    var debug = true;
+
+    var ws = new WebSocket("ws://" + location.host + "/game/socket");
+    ws.onopen = function(event) {
+        data = {
+            type: "init",
+            data: {
+                gameid: "{{game.gameid}}",
+                playerid: "{{player.playerid}}"
+            }
+        };
+        ws.send(JSON.stringify(data));
+    }
+    ws.onmessage = function(event) {
+        message = JSON.parse(event.data);
+        switch(message.type) {
+            case "alert":
+                alert(message.data.message);
+                break;
+            case "error":
+                // fall through
+            case "log": //fall through
+            case "traceback":
+                console.log(message.data.message);
+                break;
+            default:
+                // ignore unknown messages
+                break;
+        }
+    }
+
+});
+{% end %}
+
+{% block body %}
+<pre>
+{% raw game %}
+</pre>
+{% end %}

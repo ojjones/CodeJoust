@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block css %}
+<link href="/static/css/default.css" rel="stylesheet">
+{% end %}
+
+{% block body %}
+<div class="site-wrapper">
+    <div class="site-wrapper-inner">
+        <div class="cover-container">
+
+            <div class="inner cover">
+                <img src="/static/images/helmet.png" />
+                <h1 class="cover-heading">CodeJoust</h1>
+                <!--<p class="lead">Cover is a one-page template for building simple and beautiful home pages. Download, edit the text, and add your own fullscreen background photo to make it your own.</p>-->
+                <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce justo velit, laoreet nec ligula placerat, posuere hendrerit nibh. Interdum et malesuada fames ac ante ipsum primis in faucibus.</p>
+                <p class="lead">
+                <a href="{{ reverse_url('newgame') }}" class="btn btn-lg btn-default">New Game</a>
+                    <a href="#" class="btn btn-lg btn-default">Join Game</a>
+                </p>
+    <!-- Custom styles for this template -->
+            </div>
+
+            <!--<div class="mastfoot">
+                <div class="inner">
+                    <p>Cover template for <a href="http://getbootstrap.com">Bootstrap</a>, by <a href="https://twitter.com/mdo">@mdo</a>.</p>
+                </div>
+            </div>-->
+
+        </div>
+    </div>
+</div>
+{% end %}
