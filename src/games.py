@@ -136,6 +136,8 @@ class Game(WebSocketProxy):
         for player in self.list_players():
             player.send(msg)
 
+        self.score_screen.send(msg)
+
     def set_current_problem(self, problem):
         self.__current_problem = problem
 

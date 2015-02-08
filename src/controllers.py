@@ -11,7 +11,7 @@ import tornado.websocket
 
 import games
 import validate
-import spec
+from spec import *
 
 class BaseWebSocketHandler(tornado.websocket.WebSocketHandler):
 
@@ -109,20 +109,20 @@ class NewGameHandler(BaseApiHandler):
 
     def post(self):
         game = games.new_game()
-        self.write_json({"gameid": game.gameid})
+        self.write_json({GAME_ID : game.gameid})
 
 class JoinGameHandler(BaseApiHandler):
 
     def post(self):
         try:
-            playerid = self.json_args["playerid"]
-            gameid = self.json_args["gameid"]
+            playerid = self.json_args[PLAYER_ID]
+            gameid = self.json_args[GAME_ID]
 
             game = games.get_game(gameid)
             game.create_player(playerid)
 
-            response = { "gameid" : game.gameid,
-                         "playerid" : playerid}
+            response = { GAME_ID : game.gameid,
+                         PLAYER_ID : playerid}
             self.write_json(response)
 
         except games.GameNotFoundError as err:
@@ -143,11 +143,11 @@ class OverlordSocketHandler(BaseWebSocketHandler):
         super(OverlordSocketHandler, self).__init__(application, request, **kwargs)
         self.__playerid = None
 
-        self.add_handler("init_req", handle_init_req)
+        self.add_handler(INIT_REQ, handle_init_req)
 
     def handle_init_req(self, data):
         # try to find the game first
-        gameid = str(data["gameid"])
+        gameid = str(data[GAME_ID])
         try:
             games.get_game(gameid)
         except Exception as err:
@@ -162,7 +162,7 @@ class OverlordSocketHandler(BaseWebSocketHandler):
 
         # response
         resp = {
-            "type": "init_res",
+            "type": INIT_RES,
             "data": {}
         }
         self.send(resp)
@@ -193,7 +193,7 @@ class PlayerSocketHandler(BaseWebSocketHandler):
         super(PlayerSocketHandler, self).__init__(application, request, **kwargs)
         self.__playerid = None
 
-        self.add_handler("init_req", self.handle_init_req)
+        self.add_handler(INIT_REQ, self.handle_init_req)
 
     @property
     def player(self):
@@ -206,8 +206,8 @@ class PlayerSocketHandler(BaseWebSocketHandler):
 
     def handle_init_req(self, data):
         # try to find the game first
-        gameid = str(data["gameid"])
-        playerid = str(data["playerid"])
+        gameid = str(data[GAME_ID])
+        playerid = str(data[PLAYER_ID])
         try:
             games.get_game(gameid).get_player(playerid)
         except Exception as err:
@@ -225,21 +225,21 @@ class PlayerSocketHandler(BaseWebSocketHandler):
 
         # response
         resp = {
-            "type": "init_res",
-            "data": {spec.GAME_STATE:game.__game_state}
+            "type" : INIT_RES,
+            "data" : {GAME_STATE : game.__game_state}
         }
         self.send(resp)
 
         #TODO register handlers here
 
-    def handle_delta_req(self, data)
-        playerid = str(data[spec.PLAYER_ID])
-        delta = str(data["delta"])
+    def handle_delta_req(self, data):
+        playerid = str(data[PLAYER_ID])
+        delta = str(data[DELTA])
 
         update = {
-            "type": "init_res",
-            "data": {spec.PLAYER_ID:playerid}
-                     spec.DELTA:delta}
+            "type": DELTA_UPDATE,
+            "data": {PLAYER_ID : playerid}
+                     DELTA : delta}
         }
         self.game.score_screen.send(update)
 
@@ -247,12 +247,12 @@ class ScoreJoinGameHandler(BaseApiHandler):
 
     def post(self):
         try:
-            gameid = self.json_args["gameid"]
+            gameid = self.json_args[GAME_ID]
 
             game = games.get_game(gameid)
             game.create_score_screen()
 
-            response = { "gameid" : game.gameid }
+            response = { GAME_ID : game.gameid }
             self.write_json(response)
 
         except games.GameNotFoundError as err:
@@ -263,7 +263,7 @@ class ScoreSocketHandler(BaseWebSocketHandler):
     def __init__(self, application, request, **kwargs):
         super(ScoreSocketHandler, self).__init__(application, request, **kwargs)
 
-        self.add_handler("init_req", self.handle_init_req)
+        self.add_handler(INIT_REQ, self.handle_init_req)
 
     @property
     def score_screen(self):
@@ -271,7 +271,7 @@ class ScoreSocketHandler(BaseWebSocketHandler):
 
     def handle_init_req(self, data):
         # try to find the game first
-        gameid = str(data["gameid"])
+        gameid = str(data[GAME_ID])
 
         # setup socket state
         self.set_gameid(gameid)
@@ -284,8 +284,8 @@ class ScoreSocketHandler(BaseWebSocketHandler):
 
         # response
         resp = {
-            "type": "init_res",
-            "data": {spec.GAME_STATE:game.__game_state}
+            "type": INIT_RES,
+            "data": {GAME_STATE : game.__game_state}
         }
         self.send(resp)
 
@@ -294,9 +294,9 @@ class ScoreSocketHandler(BaseWebSocketHandler):
 class CompileHandler(BaseApiHandler):
 
     def post(self):
-        playerid = self.json_args["playerid"]
-        gameid = self.json_args["gameid"]
-        contents = self.json_args["code"]
+        playerid = self.json_args[PLAYER_ID]
+        gameid = self.json_args[GAME_ID]
+        contents = self.json_args[CODE]
 
         #TODO ensure game has been started
         game = games.get_game(gameid)
