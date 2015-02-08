@@ -159,6 +159,21 @@ class Game(WebSocketProxy):
     def list_players(self):
         return [player for player in self.__players.itervalues()]
 
+    def start(self):
+        if current_problem == None:
+            raise Exception("Problem has not been set")
+
+        self.__game_state = STARTED
+
+    def stop(self):
+        self.__game_state = STOPPED
+
+    def pause(self):
+        self.__game_state = PAUSED
+
+    def game_over(self)
+        self.__game_state = GAMEOVER
+
 def new_game():
     global NEXT_GAMEID
     gameid = str(NEXT_GAMEID)

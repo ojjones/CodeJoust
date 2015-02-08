@@ -176,6 +176,9 @@ class OverlordSocketHandler(BaseWebSocketHandler):
         if not self.initialized:
             return
 
+        if state == self.game.game_state:
+            return
+
         state = data["state"]
         self.game.set_game_state(state)
 
