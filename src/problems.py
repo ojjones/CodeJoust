@@ -6,9 +6,9 @@ import os
 
 import tornado.web
 
-import controllers
-
 PROBLEMSPATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), "problems")
+INPUTFILE  = "input"
+OUTPUTFILE = "output"
 
 class ProblemNotFoundError(Exception):
     """
@@ -35,6 +35,14 @@ class Problem(object):
     @property
     def path(self):
         return os.path.join(PROBLEMSPATH, self.name)
+
+    @property
+    def input_file_path(self):
+        return os.path.join(self.path, INPUTFILE)
+
+    @property
+    def output_file_path(self):
+        return os.path.join(self.path, OUTPUTFILE)
 
     @property
     def description(self):
@@ -74,17 +82,4 @@ def get_problem(name, throw=True):
         raise ProblemNotFoundError(name)
     return None
 
-
-class ProblemHandler(controllers.BaseApiHandler):
-
-    def get(self, name=None):
-        try:
-            if name is not None:
-                problem = get_problem(name)
-                self.write_json(problem.for_json())
-            else:
-                self.write_json([problem.for_json() for problem \
-                    in list_problems()])
-        except ProblemNotFoundError as err:
-            raise tornado.web.HTTPError(404, err.message)
 

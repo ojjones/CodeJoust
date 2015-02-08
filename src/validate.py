@@ -14,10 +14,10 @@ import subprocess
 # TODO: Make some classes and shit, python loves classes
 
 class JoustProblem:
-    def __init__(self, problem_name):
+    def __init__(self, problem):
         # XXXJDR make this cleaner, secure, etc...
-        self.reference_input = "../problems/%s/sample_input" % problem_name
-        self.reference_output = "../problems/%s/sample_output" % problem_name
+        self.reference_input = problem.input_file_path
+        self.reference_output = problem.output_file_path
     def make_compile_cmd(self, filename):
         return
     def make_binary_name(self, filename):

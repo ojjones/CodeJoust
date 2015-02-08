@@ -10,6 +10,7 @@ import tornado.web
 import tornado.websocket
 
 import games
+import problems
 import validate
 from spec import *
 
@@ -291,6 +292,20 @@ class ScoreSocketHandler(BaseWebSocketHandler):
 
         #TODO register handlers here
 
+class ProblemHandler(BaseApiHandler):
+
+    def get(self, name=None):
+        try:
+            if name is not None:
+                problem = get_problem(name)
+                self.write_json(problem.for_json())
+            else:
+                self.write_json([problem.for_json() for problem \
+                    in list_problems()])
+        except ProblemNotFoundError as err:
+            raise tornado.web.HTTPError(404, err.message)
+
+
 class CompileHandler(BaseApiHandler):
 
     def post(self):
@@ -300,13 +315,15 @@ class CompileHandler(BaseApiHandler):
 
         #TODO ensure game has been started
         game = games.get_game(gameid)
+        #if not game.game
 
         file_name = str(gameid) + "." + str(playerid) + ".c"
         text_file = open(file_name, "w")
         text_file.write(contents)
         text_file.close()
 
-        current_problem = game.current_problem
+        #current_problem = game.current_problem
+        current_problem = problems.get_problem("fizzbuzz")
 
         self.write_json(validate.validate(file_name, validate.CJoustProblem(current_problem)))
         #TODO Send update to game manager and viewer screen
