@@ -52,6 +52,11 @@ class Problem(object):
                 return False
         return True
 
+    def for_json(verbose=False):
+        obj = {"name": self.name,
+               "description": self.description}
+        return obj
+
 def list_problems():
     problems = []
     for entry in os.listdir(PROBLEMSPATH):
@@ -76,12 +81,10 @@ class ProblemHandler(controllers.BaseApiHandler):
         try:
             if name is not None:
                 problem = get_problem(name)
-                self.write_json({"name": problem.name,
-                            "description": problem.description})
+                self.write_json(problem.for_json())
             else:
-                self.write_json([{"name": problem.name,
-                                  "description": problem.description} for
-                                 problem in list_problems()])
+                self.write_json([problem.for_json() for problem \
+                    in list_problems()])
         except ProblemNotFoundError as err:
             raise tornado.web.HTTPError(404, err.message)
 
