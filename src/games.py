@@ -67,8 +67,7 @@ class Game(WebSocketProxy):
         self.__players = {}
 
     def __repr__(self):
-        output = "GameID: %s\nCreated: %s\nPlayer 1: %s\nPlayer 2: %s" % \
-                (self.gameid, self.created_str, repr(self.player1), repr(self.player2))
+        output = "GameID: %s" % (self.gameid)
         return output
 
     @property
@@ -101,7 +100,7 @@ class Game(WebSocketProxy):
     def get_player(self, playerid, throw=True):
         try:
             player = None
-            player = self.__player[playerid]
+            player = self.__players[playerid]
         except:
             if throw:
                 raise Exception("Invalid player ID")

@@ -212,7 +212,7 @@ class PlayerSocketHandler(BaseWebSocketHandler):
         #TODO check if another browser is already connected
         self.player.register_websocket(self)
 
-        game = get_game(gameid)
+        game = games.get_game(gameid)
 
         # response
         resp = {
