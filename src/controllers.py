@@ -144,7 +144,7 @@ class OverlordSocketHandler(BaseWebSocketHandler):
 
         self.add_handler("init_req", handle_init_req)
 
-class GameHandler(BaseApiHandler):
+class PlayerHandler(BaseApiHandler):
 
     def get(self, gameid, playerid):
         try:
@@ -154,10 +154,10 @@ class GameHandler(BaseApiHandler):
         except games.GameNotFoundError as err:
             raise tornado.web.HTTPError(404, err.message)
 
-class GameSocketHandler(BaseWebSocketHandler):
+class PlayerSocketHandler(BaseWebSocketHandler):
 
     def __init__(self, application, request, **kwargs):
-        super(GameSocketHandler, self).__init__(application, request, **kwargs)
+        super(PlayerSocketHandler, self).__init__(application, request, **kwargs)
         self.__playerid = None
 
         self.add_handler("init_req", self.handle_init_req)
