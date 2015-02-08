@@ -29,7 +29,7 @@ class BaseApiHandler(tornado.web.RequestHandler):
         else:
             self.json_args = None
 
-    def writeJson(self, data):
+    def write_json(self, data):
         self.write(json.dumps(data))
 
 class DefaultHandler(BaseApiHandler):
@@ -54,7 +54,7 @@ class JoinGameHandler(BaseApiHandler):
 
             response = { "gameid" : game.gameid,
                          "playerid" : playerid}
-            self.write(response)
+            self.write_json(response)
         except games.GameNotFoundError as err:
             raise tornado.web.HTTPError(404, err.message)
 
