@@ -93,6 +93,9 @@ class GameSocketHandler(BaseWebSocketHandler):
         super(GameSocketHandler, self).__init__(application, request, **kwargs)
         self.__gameid = None
         self.__playerid = None
+        self.__handlers = {}
+
+        self.add_handler("init_req", handle_init_req)
 
     @property
     def initialized(self):
@@ -105,6 +108,9 @@ class GameSocketHandler(BaseWebSocketHandler):
     @property
     def player(self):
         return self.game.get_player(self.__playerid)
+
+    def add_handler(self, type, handler):
+        self.__handlers[type] = handler
 
     def on_message(self, message):
         message = self.decode(message)
@@ -135,30 +141,30 @@ class GameSocketHandler(BaseWebSocketHandler):
                         }
                 self.send(resp)
 
-    def handle_init_msg(self, data):
+    def handle_init_req(self, data):
         # try to find the game first
         gameid = str(data["gameid"])
-        playerid = int(data["playerid"])
+        playerid = str(data["playerid"])
         try:
             games.get_game(gameid).get_player(playerid)
         except Exception as err:
             raise Exception("Invalid init values: %s" % err.message)
 
         # setup socket state
-        self.__gameid = str(data["gameid"])
-        self.__playerid = int(data["playerid"])
+        self.__gameid = gameid
+        self.__playerid = playerid
 
         # register socket with player object
+        #TODO check if another browser is already connected
         self.player.register_websocket(self)
 
         # response
         resp = {
-                "type": "alert",
-                "data": {
-                    "message": "Successfully initialized!"
-                    }
-                }
+            "type": "init_res",
+            "data": {}
+        }
         self.send(resp)
+
 
 class CompileHandler(BaseApiHandler):
 
