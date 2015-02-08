@@ -59,8 +59,7 @@ class Game(object):
         return output
 
     def create_player(self, playerid):
-        player = player(playerid)
-        self.__players[playerid] = player
+        self.__players[playerid] = Player(playerid)
 
     @property
     def gameid(self):
@@ -98,6 +97,7 @@ def new_game():
     return GAMES[gameid]
 
 def get_game(gameid, throw=True):
+    gameid = str(gameid)
     if gameid in GAMES:
         return GAMES[gameid]
     if throw:

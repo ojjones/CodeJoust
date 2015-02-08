@@ -166,7 +166,8 @@ class CompileHandler(BaseApiHandler):
         gameid = self.json_args["gameid"]
         contents = self.json_args["code"]
 
-        game = get_game(gameid)
+	#TODO ensure game has been started
+        game = games.get_game(gameid)
 
         file_name = str(game_id) + "." + str(playerid) + ".c"
         text_file = open(file_name, "w")
@@ -176,3 +177,4 @@ class CompileHandler(BaseApiHandler):
         current_problem = game.current_problem
 
         self.write_json(validate.validate(file_name, problem.CJoustProblem(current_problem)))
+	#TODO Send update to game manager and viewer screen
