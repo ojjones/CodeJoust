@@ -48,6 +48,7 @@ class Game(object):
     def __init__(self, gameid):
         self.__gameid = gameid
         self.__created = time.time()
+        self.__current_problem = None
 
         # init players
         self.__players = {}
@@ -70,26 +71,24 @@ class Game(object):
         return self.__created
 
     @property
+    def current_problem(self):
+        return self.__current_problem
+
+    @property
     def created_str(self):
         return time.ctime(self.created)
 
-    @property
-    def player1(self):
-        return self.__player1
-
-    @property
-    def player2(self):
-        return self.__player2
+    def set_current_problem(self, problem):
+        self.__current_problem = problem
 
     def get_player(self, playerid, throw=True):
-        playerid = int(playerid)
-        if playerid is 1:
-            return self.player1
-        elif playerid is 2:
-            return self.player2
-        if throw:
-            raise Exception("Invalid player ID")
-        return None
+        try:
+            player = None
+            player = self.__player[playerid]
+        except:
+            if throw:
+                raise Exception("Invalid player ID")
+        return player
 
 def new_game():
     global NEXT_GAMEID

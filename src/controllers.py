@@ -9,6 +9,7 @@ import tornado.web
 import tornado.websocket
 
 import games
+import validate
 
 class BaseWebSocketHandler(tornado.websocket.WebSocketHandler):
 
@@ -49,7 +50,8 @@ class JoinGameHandler(BaseApiHandler):
 
     def post(self):
         try:
-            playerid = self.get_body_argument("playerid")
+            playerid = self.json_args["playerid"]
+            gameid = self.json_args["gameid"]
 
             game = games.get_game(gameid)
             game.create_player(playerid)
@@ -57,6 +59,7 @@ class JoinGameHandler(BaseApiHandler):
             response = { "gameid" : game.gameid,
                          "playerid" : playerid}
             self.write_json(response)
+
         except games.GameNotFoundError as err:
             raise tornado.web.HTTPError(404, err.message)
 
@@ -155,4 +158,20 @@ class GameSocketHandler(BaseWebSocketHandler):
                 }
         self.send(resp)
 
+class CompileHandler(BaseApiHandler):
 
+    def post(self):
+        playerid = self.json_args["playerid"]
+        gameid = self.json_args["gameid"]
+        contents = self.json_args["code"]
+
+        game = get_game(gameid)
+
+        file_name = str(game_id) + "." + str(playerid) + ".c"
+        text_file = open(file_name, "w")
+        text_file.write(contents)
+        text_file.close()
+
+        current_problem = game.current_problem
+
+        self.write_json(validate.validate(file_name, problem.CJoustProblem(current_problem)))

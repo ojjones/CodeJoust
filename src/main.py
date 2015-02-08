@@ -20,13 +20,14 @@ def make_app():
         [
             url(r"/", controllers.DefaultHandler),
             url(r"/newgame", controllers.NewGameHandler, name="newgame"),
-            url(r"/joingame", controllers.JoinGameHandler, name="joingame"),
+            url(r"/api/joingame", controllers.JoinGameHandler, name="joingame"),
             url(r"/overlord/g([0-9]+)", controllers.OverlordHandler, name="overlord"),
             url(r"/overlord/socket", controllers.OverlordSocketHandler, name="overlord_socket"),
             url(r"/game/g([0-9]+)p(1|2)", controllers.GameHandler, name="game"),
             url(r"/game/socket", controllers.GameSocketHandler, name="game_socket"),
             url(r"/api/problem/(.+)", problems.ProblemHandler, name="api_problem"),
-            url("/api/problems", problems.ProblemHandler, name="api_problems")
+            url("/api/problems", problems.ProblemHandler, name="api_problems"),
+            url(r"/api/compile", controllers.CompileHandler, name="compile"),
         ],
         debug=options.debug,
         static_path=STATICPATH,
