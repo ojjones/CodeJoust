@@ -1,4 +1,4 @@
-/* vim: set tabstop=4 softtabstop=4 shiftwidth=4 expandtab : */
+# vim: set tabstop=4 softtabstop=4 shiftwidth=4 expandtab
 import os
 
 import tornado.httpserver
