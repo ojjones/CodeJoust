@@ -1,0 +1,4 @@
+{"playerid":"testplayer",
+ "gameid": 1,
+ "code":"#include <stdio.h> int main(void){return 0;}"
+}
