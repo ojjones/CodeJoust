@@ -36,8 +36,14 @@ class BaseWebSocketHandler(tornado.websocket.WebSocketHandler):
             raise Exception("Socket already initialized")
         self.__gameid = gameid
 
+    def has_handler(self, type):
+        if type in self.__handlers
+
     def add_handler(self, type, handler):
         self.__handlers[type] = handler
+
+    def get_handler(self, type):
+        return self.__handlers.get(type)
 
     def send(self, data):
         self.write_message(self.encode(data))
@@ -47,6 +53,37 @@ class BaseWebSocketHandler(tornado.websocket.WebSocketHandler):
 
     def decode(self, data):
         return json.loads(data)
+
+    def on_message(self, message):
+        try:
+            message = self.decode(message)
+        except:
+            # ignore invalid messages
+            return
+
+        try:
+            handler = self.get_handler(message["type"])
+            if handler:
+                handler(message["data"])
+            else:
+                raise Exception("Invalid message type received")
+        except Exception as err:
+            logging.error(err, exc_info=True)
+            resp = {
+                    "type": "error",
+                    "data": {
+                        "message": err.message
+                        }
+                    }
+            self.send(resp)
+            if self.application.settings.get("serve_traceback", False):
+                resp = {
+                        "type": "traceback",
+                        "data": {
+                            "message": traceback.format_exc()
+                            }
+                        }
+                self.send(resp)
 
 class BaseApiHandler(tornado.web.RequestHandler):
 
@@ -123,7 +160,7 @@ class GameSocketHandler(BaseWebSocketHandler):
         super(GameSocketHandler, self).__init__(application, request, **kwargs)
         self.__playerid = None
 
-        self.add_handler("init_req", handle_init_req)
+        self.add_handler("init_req", self.handle_init_req)
 
     @property
     def player(self):
@@ -133,35 +170,6 @@ class GameSocketHandler(BaseWebSocketHandler):
         if self.initialized:
             raise Exception("Socket already initialized")
         self.__playerid = playerid
-
-    def on_message(self, message):
-        message = self.decode(message)
-        try:
-            if not self.initialized:
-                # only an init message is valid
-                if message["type"] == "init":
-                    self.handle_init_msg(message["data"])
-                else:
-                    raise Exception("Invalid message type received")
-            else:
-                pass
-        except Exception as err:
-            logging.error(err, exc_info=True)
-            resp = {
-                    "type": "error",
-                    "data": {
-                        "message": err.message
-                        }
-                    }
-            self.send(resp)
-            if self.application.settings.get("serve_traceback", False):
-                resp = {
-                        "type": "traceback",
-                        "data": {
-                            "message": traceback.format_exc()
-                            }
-                        }
-                self.send(resp)
 
     def handle_init_req(self, data):
         # try to find the game first
