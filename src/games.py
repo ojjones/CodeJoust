@@ -20,19 +20,10 @@ class GameNotFoundError(Exception):
     def gameid(self):
         return self.__gameid
 
+class WebSocketProxy(object):
 
-class Player(object):
-    INITIALIZED = 0
-    CONNECTED = 1
-    DISCONNECTED = 2
-
-    def __init__(self, playerid):
-        self.__playerid = playerid
+    def __init__(self):
         self.__ws = None
-
-    @property
-    def playerid(self):
-        return self.__playerid
 
     @property
     def connected(self):
@@ -44,10 +35,24 @@ class Player(object):
     def unregister_websocket(self):
         self.__ws = None
 
-class Game(object):
+    def send(self, msg):
+        if self.connected:
+            self.__ws.send(msg)
+
+class Player(WebSocketProxy):
+
+    def __init__(self, playerid):
+        super(Player, self).__init__()
+        self.__playerid = playerid
+
+    @property
+    def playerid(self):
+        return self.__playerid
+
+class Game(WebSocketProxy):
 
     #GAME STATE
-    STOP = "STOP" 
+    STOP = "STOP"
     START = "START"
     PAUSE = "PAUSE"
     GAME_OVER = "GAME_OVER"
@@ -66,9 +71,6 @@ class Game(object):
                 (self.gameid, self.created_str, repr(self.player1), repr(self.player2))
         return output
 
-    def create_player(self, playerid):
-        self.__players[playerid] = Player(playerid)
-
     @property
     def gameid(self):
         return self.__gameid
@@ -78,12 +80,20 @@ class Game(object):
         return self.__created
 
     @property
+    def created_str(self):
+        return time.ctime(self.created)
+
+    @property
     def current_problem(self):
         return self.__current_problem
 
-    @property
-    def created_str(self):
-        return time.ctime(self.created)
+    def create_player(self, playerid):
+        self.__players[playerid] = Player(playerid)
+
+    def broadcast(self, msg):
+        self.send(msg)
+        for player in self.list_players():
+            player.send(msg)
 
     def set_current_problem(self, problem):
         self.__current_problem = problem
@@ -96,6 +106,9 @@ class Game(object):
             if throw:
                 raise Exception("Invalid player ID")
         return player
+
+    def list_players(self):
+        return [player for player in self.__players.itervalues()]
 
 def new_game():
     global NEXT_GAMEID

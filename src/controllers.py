@@ -145,6 +145,29 @@ class OverlordSocketHandler(BaseWebSocketHandler):
 
         self.add_handler("init_req", handle_init_req)
 
+    def handle_init_req(self, data):
+        # try to find the game first
+        gameid = str(data["gameid"])
+        try:
+            games.get_game(gameid)
+        except Exception as err:
+            raise Exception("Invalid init values: %s" % err.message)
+
+        # setup socket state
+        self.set_gameid(gameid)
+
+        # register socket with player object
+        #TODO check if another browser is already connected
+
+        # response
+        resp = {
+            "type": "init_res",
+            "data": {}
+        }
+        self.send(resp)
+
+        #TODO register handlers here
+
 class PlayerHandler(BaseApiHandler):
 
     def get(self, gameid, playerid):
