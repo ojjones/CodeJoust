@@ -169,7 +169,8 @@ class OverlordSocketHandler(BaseWebSocketHandler):
         self.send(resp)
 
         #TODO register handlers here
-        self.add_handler("set_state", self.handle_set_state)
+        self.add_handler(SET_STATE, self.handle_set_state)
+        self.add_handler(SELECT_PROBLEM, self.handle_select_problem)
 
     def handle_set_state(self, data):
         if not self.initialized:
@@ -183,6 +184,12 @@ class OverlordSocketHandler(BaseWebSocketHandler):
             "data": {GAME_STATE : state}
         }
         self.game.broadcast(msg)
+
+    def handle_select_problem(self, data):
+        if not self.initialized:
+            return
+
+        self.game.set_problem(self, data["problem"])
 
 class PlayerHandler(BaseApiHandler):
 

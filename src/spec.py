@@ -2,6 +2,7 @@
 INIT_REQ = "init_req"
 INIT_RES = "init_res"
 SET_STATE = "set_state"
+SELECT_PROBLEM = "select_problem"
 DELTA_UPDATE = "delta_update"
 
 #MESSAGE OBJECTS

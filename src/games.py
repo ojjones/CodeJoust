@@ -97,24 +97,35 @@ class Game(WebSocketProxy):
         valid_states = [STOPPED, self.START, PAUSED, self.GAME_OVER]
         if state not in valid_states:
             raise Exception("Invalid game state: %s" % state)
-        if self.__game_state == STOPPED:
+        if self.game_state == STOPPED:
             if state == STARTED:
                 return self.start()
-        elif self.__game_state == STARTED:
+        elif self.game_state == STARTED:
             if state == PAUSED:
                 return self.pause()
             elif state == GAME_OVER:
                 return self.game_over()
-        elif self.__game_state == PAUSED:
+        elif self.game_state == PAUSED:
             if state == STARTED:
                 return self.start()
             elif state == GAMEOVER:
                 return self.game_over()
-        elif self.__game_state == GAMEOVER:
+        elif self.game_state == GAMEOVER:
             if state == self.STARTED:
                return  self.start()
         raise RuntimeError("Invalid state transition from %s -> %s" \
                 (self.__game_state, state))
+
+    def set_problem(self, name):
+        if self.game_state in (STARTED, PAUSED) :
+            raise Exception("Cannot set game problem from %s state", \
+                    self.game_state)
+        try:
+            problems.get_problem(name)
+        except:
+            raise Exception("Couldn't find problem '%s'" %  problem)
+        self.__current_problem = name
+
 
     def create_player(self, playerid):
         self.__players[playerid] = Player(playerid)
