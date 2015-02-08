@@ -1,3 +1,4 @@
+/* vim: set tabstop=4 softtabstop=4 shiftwidth=4 expandtab : */
 #!/usr/bin/python
 """
 Library for compiling and validating small code snippets against a known output

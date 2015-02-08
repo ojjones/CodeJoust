@@ -1,3 +1,4 @@
+/* vim: set tabstop=4 softtabstop=4 shiftwidth=4 expandtab : */
 """
 Tornado request handlers
 """
@@ -166,7 +167,7 @@ class CompileHandler(BaseApiHandler):
         gameid = self.json_args["gameid"]
         contents = self.json_args["code"]
 
-	#TODO ensure game has been started
+        #TODO ensure game has been started
         game = games.get_game(gameid)
 
         file_name = str(gameid) + "." + str(playerid) + ".c"
@@ -177,4 +178,4 @@ class CompileHandler(BaseApiHandler):
         current_problem = game.current_problem
 
         self.write_json(validate.validate(file_name, validate.CJoustProblem(current_problem)))
-	#TODO Send update to game manager and viewer screen
+        #TODO Send update to game manager and viewer screen
