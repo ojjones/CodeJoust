@@ -95,7 +95,10 @@ class BaseApiHandler(tornado.web.RequestHandler):
         if "Content-type" in self.request.headers and \
             self.request.headers["Content-type"].startswith("application/json") and \
             len(self.request.body) > 0:
-            self.json_args = json.loads(self.request.body)
+            try:
+                self.json_args = json.loads(self.request.body)
+            except Exception as err:
+                raise Exception("Could not parse Json. body:%s" % self.request.body)
         else:
             self.json_args = None
 
