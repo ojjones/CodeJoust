@@ -223,6 +223,17 @@ class PlayerSocketHandler(BaseWebSocketHandler):
 
         #TODO register handlers here
 
+    def handle_delta_req(self, data)
+        playerid = str(data[spec.PLAYER_ID])
+        delta = str(data["delta"])
+
+        update = {
+            "type": "init_res",
+            "data": {spec.PLAYER_ID:playerid}
+                     spec.DELTA:delta}
+        }
+        self.game.score_screen.send(update)
+
 class ScoreJoinGameHandler(BaseApiHandler):
 
     def post(self):
