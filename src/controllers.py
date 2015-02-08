@@ -199,7 +199,7 @@ class PlayerSocketHandler(BaseWebSocketHandler):
     def player(self):
         return self.game.get_player(self.__playerid)
 
-    def set_player(self, playerid):
+    def set_playerid(self, playerid):
         if self.initialized:
             raise Exception("Socket already initialized")
         self.__playerid = playerid
@@ -230,7 +230,7 @@ class PlayerSocketHandler(BaseWebSocketHandler):
         }
         self.send(resp)
 
-        #TODO register handlers here
+        self.add_handler(INIT_REQ, self.handle_delta_req)
 
     def handle_delta_req(self, data):
         playerid = str(data[PLAYER_ID])
@@ -280,7 +280,7 @@ class ScoreSocketHandler(BaseWebSocketHandler):
         #TODO check if another browser is already connected
         self.score_screen.register_websocket(self)
 
-        game = get_game(gameid)
+        game = games.get_game(gameid)
 
         # response
         resp = {

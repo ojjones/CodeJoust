@@ -1,7 +1,7 @@
 
 ### Types
 
-    <STATE> = <string [STOPPED, STARTED, PAUSED, GAMEOVER]>
+    <GAME_STATE> = <string [STOPPED, STARTED, PAUSED, GAMEOVER]>
 
     <PROBLEM> = {
         name: <string>
@@ -9,7 +9,7 @@
     }
 
 
-#### WS: /socket/game
+#### WS: /socket/player
 
     init_req: {
         gameid: <string>,
@@ -17,7 +17,7 @@
     }
 
     init_res: {
-        state: <STATE>,
+        state: <GAME_STATE>,
         union {
             STOPPED: { },
             STARTED: {
@@ -32,7 +32,7 @@
         }
     }
 
-    code_update_event: {
+    delta_update: {
         delta: <string>,
     }
 
@@ -43,7 +43,7 @@
     }
 
     init_res: {
-        state: <STATE>,
+        state: <GAME_STATE>,
         union {
             STOPPED: { },
             STARTED: {
@@ -58,7 +58,7 @@
         }
     }
 
-    set_state = <STATE>
+    set_state = <GAME_STATE>
 
 #### HTTP: /api/compile
 

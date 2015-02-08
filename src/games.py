@@ -3,6 +3,7 @@
 Game Session Management
 """
 import time
+from spec import *
 
 NEXT_GAMEID = 1
 GAMES = {}
@@ -56,12 +57,6 @@ class ScoreScreen(WebSocketProxy):
 
 class Game(WebSocketProxy):
 
-    #GAME STATE
-    STOP = "STOP"
-    START = "START"
-    PAUSE = "PAUSE"
-    GAME_OVER = "GAME_OVER"
-
     def __init__(self, gameid):
         self.__gameid = gameid
         self.__created = time.time()
@@ -99,14 +94,14 @@ class Game(WebSocketProxy):
         return self.__game_state
 
     def set_game_state(self, state):
-        valid_states = [self.STOP, self.START, self.PAUSE, self.GAME_OVER]
+        valid_states = [self.STOP, self.START, PAUSED, self.GAME_OVER]
         if state not in valid_states:
             raise Exception("Invalid game state: %s" % state)
         if self.__game_state == STOPPED:
             if state == STARTED:
                 return self.start()
         elif self.__game_state == STARTED:
-            if state == PAUSE:
+            if state == PAUSED:
                 return self.pause()
             elif state == GAME_OVER:
                 return self.game_over()
