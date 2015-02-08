@@ -14,6 +14,17 @@ import validate
 
 class BaseWebSocketHandler(tornado.websocket.WebSocketHandler):
 
+    def __init__(self, application, request, **kwargs):
+        super(GameSocketHandler, self).__init__(application, request, **kwargs)
+        self.__handlers = {}
+
+    def add_handler(self, type, handler):
+        self.__handlers[type] = handler
+
+    @property
+    def handlers(self):
+        return self.__handlers
+
     def send(self, data):
         self.write_message(self.encode(data))
 
@@ -93,7 +104,6 @@ class GameSocketHandler(BaseWebSocketHandler):
         super(GameSocketHandler, self).__init__(application, request, **kwargs)
         self.__gameid = None
         self.__playerid = None
-        self.__handlers = {}
 
         self.add_handler("init_req", handle_init_req)
 
@@ -108,9 +118,6 @@ class GameSocketHandler(BaseWebSocketHandler):
     @property
     def player(self):
         return self.game.get_player(self.__playerid)
-
-    def add_handler(self, type, handler):
-        self.__handlers[type] = handler
 
     def on_message(self, message):
         message = self.decode(message)
@@ -164,6 +171,8 @@ class GameSocketHandler(BaseWebSocketHandler):
             "data": {}
         }
         self.send(resp)
+
+        #TODO register handlers here
 
 
 class CompileHandler(BaseApiHandler):
