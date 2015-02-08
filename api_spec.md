@@ -9,14 +9,14 @@
     }
 
 
-#### /socket/game
+#### WS: /socket/game
 
-    init_req = {
+    init_req: {
         gameid: <string>,
         playerid: <string>
     }
 
-    init_res = {
+    init_res: {
         state: <STATE>,
         union {
             STOPPED: { },
@@ -32,17 +32,17 @@
         }
     }
 
-    code_update_event = {
+    code_update_event: {
         delta: <string>,
     }
 
-#### /socket/overload
+#### WS: /socket/overload
 
-    init_req = {
+    init_req: {
         gameid: <string>
     }
 
-    init_res = {A
+    init_res: {
         state: <STATE>,
         union {
             STOPPED: { },
@@ -60,3 +60,12 @@
 
     set_state = <STATE>
 
+#### HTTP: /api/compile
+
+    req: {
+        gameid: <string>,
+        playerid: <string>,
+        code: <string> // base64?
+    }
+
+    res: none
