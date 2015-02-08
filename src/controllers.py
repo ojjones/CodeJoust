@@ -37,7 +37,7 @@ class BaseWebSocketHandler(tornado.websocket.WebSocketHandler):
         self.__gameid = gameid
 
     def has_handler(self, type):
-        if type in self.__handlers
+        return type in self.__handlers
 
     def add_handler(self, type, handler):
         self.__handlers[type] = handler
