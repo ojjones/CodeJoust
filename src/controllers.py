@@ -158,6 +158,7 @@ class OverlordSocketHandler(BaseWebSocketHandler):
 
         # register socket with player object
         #TODO check if another browser is already connected
+        self.game.register_websocket(self)
 
         # response
         resp = {
@@ -167,6 +168,14 @@ class OverlordSocketHandler(BaseWebSocketHandler):
         self.send(resp)
 
         #TODO register handlers here
+        self.add_handler("set_state", self.handle_set_state)
+
+    def handle_set_state(self, data):
+        if not self.initialized:
+            return
+
+        state = data["state"]
+        self.game.set_game_state(state)
 
 class PlayerHandler(BaseApiHandler):
 
