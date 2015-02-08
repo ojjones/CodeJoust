@@ -29,6 +29,8 @@ def make_app():
             url(r"/api/problem/(.+)", problems.ProblemHandler, name="api_problem"),
             url("/api/problems", problems.ProblemHandler, name="api_problems"),
             url("/api/compile", controllers.CompileHandler, name="compile"),
+            url(r"/score/g([0-9]+)", controllers.ScoreJoinGameHandler, name="score"),
+            url("/score/socket", controllers.ScoreSocketHandler, name="score_socket"),
         ],
         debug=options.debug,
         static_path=STATICPATH,

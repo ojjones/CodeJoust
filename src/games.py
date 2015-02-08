@@ -49,6 +49,11 @@ class Player(WebSocketProxy):
     def playerid(self):
         return self.__playerid
 
+class ScoreScreen(WebSocketProxy):
+
+    def __init__(self, playerid):
+        super(ScoreScreen, self).__init__()
+
 class Game(WebSocketProxy):
 
     #GAME STATE
@@ -65,6 +70,9 @@ class Game(WebSocketProxy):
 
         # init players
         self.__players = {}
+
+        # init scorescreen
+        self.__scorescreen = None
 
     def __repr__(self):
         output = "GameID: %s" % (self.gameid)
@@ -88,6 +96,13 @@ class Game(WebSocketProxy):
 
     def create_player(self, playerid):
         self.__players[playerid] = Player(playerid)
+
+    @property
+    def score_screen(self):
+        return self.__scorescreen
+
+    def create_score_screen(self):
+        self.__score = ScoreScreen()
 
     def broadcast(self, msg):
         self.send(msg)

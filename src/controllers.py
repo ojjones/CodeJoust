@@ -223,7 +223,53 @@ class PlayerSocketHandler(BaseWebSocketHandler):
 
         #TODO register handlers here
 
+class ScoreJoinGameHandler(BaseApiHandler):
 
+    def post(self):
+        try:
+            gameid = self.json_args["gameid"]
+
+            game = games.get_game(gameid)
+            game.create_score_screen()
+
+            response = { "gameid" : game.gameid }
+            self.write_json(response)
+
+        except games.GameNotFoundError as err:
+            raise tornado.web.HTTPError(404, err.message)
+
+class ScoreSocketHandler(BaseWebSocketHandler):
+
+    def __init__(self, application, request, **kwargs):
+        super(ScoreSocketHandler, self).__init__(application, request, **kwargs)
+
+        self.add_handler("init_req", self.handle_init_req)
+
+    @property
+    def score_screen(self):
+        return self.game.score_screen
+
+    def handle_init_req(self, data):
+        # try to find the game first
+        gameid = str(data["gameid"])
+
+        # setup socket state
+        self.set_gameid(gameid)
+
+        # register socket with player object
+        #TODO check if another browser is already connected
+        self.score_screen.register_websocket(self)
+
+        game = get_game(gameid)
+
+        # response
+        resp = {
+            "type": "init_res",
+            "data": {spec.GAME_STATE:game.__game_state}
+        }
+        self.send(resp)
+
+        #TODO register handlers here
 
 class CompileHandler(BaseApiHandler):
 
