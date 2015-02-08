@@ -178,6 +178,12 @@ class OverlordSocketHandler(BaseWebSocketHandler):
         state = data["state"]
         self.game.set_game_state(state)
 
+        msg = {
+            "type": SET_STATE,
+            "data": {GAME_STATE : state}
+        }
+        self.game.broadcast(msg)
+
 class PlayerHandler(BaseApiHandler):
 
     def get(self, gameid, playerid):

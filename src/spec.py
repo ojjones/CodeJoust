@@ -1,13 +1,7 @@
-#Game State Types
-GAME_STATE = "GAME_STATE"
-STOPPED = "STOPPED"
-STARTED = "STARTED"
-PAUSED = "PAUSED"
-GAMEOVER = "GAMEOVER"
-
 #MESSAGE TYPES
 INIT_REQ = "init_req"
 INIT_RES = "init_res"
+SET_STATE = "set_state"
 DELTA_UPDATE = "delta_update"
 
 #MESSAGE OBJECTS
@@ -18,3 +12,10 @@ CODE = "code"
 MESSAGE = "message"
 WINNER = "winner"
 PROBLEM = "problem"
+#Game ENUM TYPE 
+GAME_STATE = "GAME_STATE"
+STOPPED = "STOPPED"
+STARTED = "STARTED"
+PAUSED = "PAUSED"
+GAMEOVER = "GAMEOVER"
+
