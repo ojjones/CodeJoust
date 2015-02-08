@@ -3,4 +3,143 @@
  */
 
 /* Fonts */
+@import url(http://fonts.googleapis.com/css?family=Mystery+Quest);
+
+html, body {
+    font-size: 14px;
+    line-height: 1.5em;
+    font-family: 'Roboto', sans-serif;
+    background-color: #000;
+}
+
+.modal {
+    color: #333;
+}
+
+#playerbar {
+    position:absolute;
+    top:0px;
+    bottom:25px;
+    left:0px;
+    right:0px;
+    background-color: #333;
+    border: 1px 0 1px 0 solid #222;
+    color: #efefef;
+    font-size: 14px;
+    line-height: 1.6em;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 800;
+    letter-spacing: .075em;
+}
+
+.navbar-brand {
+    font-size: 24px;
+    font-family: 'Mystery Quest', cursive;
+    color: #fff;
+}
+
+#playerbar ul {
+    float:right;
+    list-style-type: none;
+    margin:0px;
+    padding:0px;
+}
+
+#playerbar li {
+    display:inline;
+}
+
+#playerbar li a {
+}
+
+.editor {
+    position: absolute;
+    top:0;
+    left:0;
+    right:0;
+    top:50px;
+    bottom: 0;
+}
+
+#editor-actual, #editor-player1 {
+    position: absolute;
+    top:0;
+    left:0;
+    top:50px;
+    bottom: 0;
+    right:50%;
+}
+
+#editor-actual {
+    right:0;
+}
+
+#editor-mock, #editor-player2 {
+    position: absolute;
+    top:0;
+    right:0;
+    top:50px;
+    bottom: 0;
+    left:50%;
+}
+
+#editor-player1, #editor-player2 {
+}
+
+
+.timer {
+    position:fixed;
+    bottom: 10px;
+    z-index: 50;
+    width: 100px;
+    text-align:center;
+    font-size: 32px;
+    color: #fff;
+}
+
+.score {
+    width: 33%;
+    float:left;
+}
+
+.score.score-player1 {
+    padding-left: 3em;
+}
+
+.score.score-player2 {
+    padding-right: 3em;
+}
+
+
+.modal.error ul { 
+    font-size: 12px;
+    list-style-type: none;
+    margin:0;
+    padding:0;
+    margin-left: 10px;
+}
+
+.modal.error li { 
+    text-align: left !important;
+
+}
+
+.modal.error h1 {
+    font-size: 16px;
+}
+
+
+.bttn {
+    background: #5c5c5c;
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 14px;
+    padding: 4px 7px 4px 7px;
+    text-decoration: none;
+}
+
+.bttn:hover {
+    background: #3cb0fd;
+    text-decoration: none;
+}
 
