@@ -16,14 +16,28 @@ class BaseWebSocketHandler(tornado.websocket.WebSocketHandler):
 
     def __init__(self, application, request, **kwargs):
         super(BaseWebSocketHandler, self).__init__(application, request, **kwargs)
+        self.__gameid = None
         self.__handlers = {}
 
-    def add_handler(self, type, handler):
-        self.__handlers[type] = handler
+    @property
+    def initialized(self):
+        return self.__gameid is not None
+
+    @property
+    def game(self):
+        return games.get_game(self.__gameid)
 
     @property
     def handlers(self):
         return self.__handlers
+
+    def set_gameid(self, gameid):
+        if self.initialized:
+            raise Exception("Socket already initialized")
+        self.__gameid = gameid
+
+    def add_handler(self, type, handler):
+        self.__handlers[type] = handler
 
     def send(self, data):
         self.write_message(self.encode(data))
@@ -86,7 +100,12 @@ class OverlordHandler(BaseApiHandler):
             raise tornado.web.HTTPError(404, err.message)
 
 class OverlordSocketHandler(BaseWebSocketHandler):
-    pass
+
+    def __init__(self, application, request, **kwargs):
+        super(OverlordSocketHandler, self).__init__(application, request, **kwargs)
+        self.__playerid = None
+
+        self.add_handler("init_req", handle_init_req)
 
 class GameHandler(BaseApiHandler):
 
@@ -102,22 +121,18 @@ class GameSocketHandler(BaseWebSocketHandler):
 
     def __init__(self, application, request, **kwargs):
         super(GameSocketHandler, self).__init__(application, request, **kwargs)
-        self.__gameid = None
         self.__playerid = None
 
         self.add_handler("init_req", handle_init_req)
 
     @property
-    def initialized(self):
-        return self.__gameid is not None
-
-    @property
-    def game(self):
-        return games.get_game(self.__gameid)
-
-    @property
     def player(self):
         return self.game.get_player(self.__playerid)
+
+    def set_player(self, playerid):
+        if self.initialized:
+            raise Exception("Socket already initialized")
+        self.__playerid = playerid
 
     def on_message(self, message):
         message = self.decode(message)
@@ -158,8 +173,8 @@ class GameSocketHandler(BaseWebSocketHandler):
             raise Exception("Invalid init values: %s" % err.message)
 
         # setup socket state
-        self.__gameid = gameid
-        self.__playerid = playerid
+        self.set_gameid(gameid)
+        self.set_playerid(playerid)
 
         # register socket with player object
         #TODO check if another browser is already connected
