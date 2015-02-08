@@ -238,7 +238,7 @@ class PlayerSocketHandler(BaseWebSocketHandler):
 
         update = {
             "type": DELTA_UPDATE,
-            "data": {PLAYER_ID : playerid}
+            "data": {PLAYER_ID : playerid,
                      DELTA : delta}
         }
         self.game.score_screen.send(update)

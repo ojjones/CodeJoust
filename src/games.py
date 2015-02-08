@@ -101,7 +101,7 @@ class Game(WebSocketProxy):
     def set_game_state(self, state):
         valid_states = [self.STOP, self.START, self.PAUSE, self.GAME_OVER]
         if state not in valid_states:
-            raise Exception("Invalid game state: %s" state)
+            raise Exception("Invalid game state: %s" % state)
         if self.__game_state == STOPPED:
             if state == STARTED:
                 return self.start()
@@ -119,7 +119,7 @@ class Game(WebSocketProxy):
             if state == self.STARTED:
                return  self.start()
         raise RuntimeError("Invalid state transition from %s -> %s" \
-                (self.__game_state, state)
+                (self.__game_state, state))
 
     def create_player(self, playerid):
         self.__players[playerid] = Player(playerid)
