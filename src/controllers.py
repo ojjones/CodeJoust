@@ -15,7 +15,7 @@ import validate
 class BaseWebSocketHandler(tornado.websocket.WebSocketHandler):
 
     def __init__(self, application, request, **kwargs):
-        super(GameSocketHandler, self).__init__(application, request, **kwargs)
+        super(BaseWebSocketHandler, self).__init__(application, request, **kwargs)
         self.__handlers = {}
 
     def add_handler(self, type, handler):
