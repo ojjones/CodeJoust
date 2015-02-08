@@ -7,6 +7,7 @@ import tornado.web
 from tornado.web import url
 
 import controllers
+import problems
 
 STATICPATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), "static")
 TEMPLATEPATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), "templates")
@@ -23,9 +24,9 @@ def make_app():
             url(r"/overlord/g([0-9]+)", controllers.OverlordHandler, name="overlord"),
             url(r"/overlord/socket", controllers.OverlordSocketHandler, name="overlord_socket"),
             url(r"/game/g([0-9]+)p(1|2)", controllers.GameHandler, name="game"),
-            url(r"/game/socket", controllers.GameSocketHandler, name="game_socket")
-
-
+            url(r"/game/socket", controllers.GameSocketHandler, name="game_socket"),
+            url(r"/api/problem/(.+)", problems.ProblemHandler, name="api_problem"),
+            url("/api/problems", problems.ProblemHandler, name="api_problems")
         ],
         debug=options.debug,
         static_path=STATICPATH,

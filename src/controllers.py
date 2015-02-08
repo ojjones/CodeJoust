@@ -24,12 +24,14 @@ class BaseWebSocketHandler(tornado.websocket.WebSocketHandler):
 class BaseApiHandler(tornado.web.RequestHandler):
 
     def prepare(self):
-        if self.request.headers["Content-Type"].startswith("application/json"):
+        if "Content-type" in self.request.headers and \
+            self.request.headers["Content-type"].startswith("application/json"):
             self.json_args = json.loads(self.request.body)
         else:
             self.json_args = None
 
     def write_json(self, data):
+        self.set_header('Content-type', 'application/json')
         self.write(json.dumps(data))
 
 class DefaultHandler(BaseApiHandler):
