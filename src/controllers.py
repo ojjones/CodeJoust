@@ -21,18 +21,44 @@ class BaseWebSocketHandler(tornado.websocket.WebSocketHandler):
     def decode(self, data):
         return json.loads(data)
 
-class DefaultHandler(tornado.web.RequestHandler):
+class BaseApiHandler(tornado.web.RequestHandler):
+
+    def prepare(self):
+        if self.request.headers["Content-Type"].startswith("application/json"):
+            self.json_args = json.loads(self.request.body)
+        else:
+            self.json_args = None
+
+    def writeJson(self, data):
+        self.write(json.dumps(data))
+
+class DefaultHandler(BaseApiHandler):
 
     def get(self):
         self.render("default.html")
 
-class NewGameHandler(tornado.web.RequestHandler):
+class NewGameHandler(BaseApiHandler):
 
     def get(self):
         game = games.new_game()
         self.redirect(self.reverse_url("overlord", game.gameid))
 
-class OverlordHandler(tornado.web.RequestHandler):
+class JoinGameHandler(BaseApiHandler):
+
+    def post(self):
+        try:
+            playerid = self.get_body_argument("playerid")
+
+            game = games.get_game(gameid)
+            game.create_player(playerid)
+
+            response = { "gameid" : game.gameid,
+                         "playerid" : playerid}
+            self.write(response)
+        except games.GameNotFoundError as err:
+            raise tornado.web.HTTPError(404, err.message)
+
+class OverlordHandler(BaseApiHandler):
 
     def get(self, gameid):
         try:
@@ -44,7 +70,7 @@ class OverlordHandler(tornado.web.RequestHandler):
 class OverlordSocketHandler(BaseWebSocketHandler):
     pass
 
-class GameHandler(tornado.web.RequestHandler):
+class GameHandler(BaseApiHandler):
 
     def get(self, gameid, playerid):
         try:

@@ -31,7 +31,7 @@ class Player(object):
 
     @property
     def playerid(self):
-        return int(self.__playerid)
+        return self.__playerid
 
     @property
     def connected(self):
@@ -43,7 +43,6 @@ class Player(object):
     def unregister_websocket(self):
         self.__ws = None
 
-
 class Game(object):
 
     def __init__(self, gameid):
@@ -51,13 +50,16 @@ class Game(object):
         self.__created = time.time()
 
         # init players
-        self.__player1 = Player(1)
-        self.__player2 = Player(2)
+        self.__players = {}
 
     def __repr__(self):
         output = "GameID: %s\nCreated: %s\nPlayer 1: %s\nPlayer 2: %s" % \
                 (self.gameid, self.created_str, repr(self.player1), repr(self.player2))
         return output
+
+    def create_player(self, playerid):
+        player = player(playerid)
+        self.__players[playerid] = player
 
     @property
     def gameid(self):

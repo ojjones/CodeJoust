@@ -19,7 +19,7 @@ def make_app():
         [
             url(r"/", controllers.DefaultHandler),
             url(r"/newgame", controllers.NewGameHandler, name="newgame"),
-            #url(r"/joingame", controllers.JoinGameHandler, name="joingame"),
+            url(r"/joingame", controllers.JoinGameHandler, name="joingame"),
             url(r"/overlord/g([0-9]+)", controllers.OverlordHandler, name="overlord"),
             url(r"/overlord/socket", controllers.OverlordSocketHandler, name="overlord_socket"),
             url(r"/game/g([0-9]+)p(1|2)", controllers.GameHandler, name="game"),
