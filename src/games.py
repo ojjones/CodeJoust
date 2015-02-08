@@ -171,7 +171,7 @@ class Game(WebSocketProxy):
     def pause(self):
         self.__game_state = PAUSED
 
-    def game_over(self)
+    def game_over(self):
         self.__game_state = GAMEOVER
 
 def new_game():
