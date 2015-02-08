@@ -47,16 +47,16 @@ class Player(object):
 class Game(object):
 
     #GAME STATE
-    STOP = 0
-    START = 1
-    PAUSE = 2
-    GAME_OVER = 3
+    STOP = "STOP" 
+    START = "START"
+    PAUSE = "PAUSE"
+    GAME_OVER = "GAME_OVER"
 
     def __init__(self, gameid):
         self.__gameid = gameid
         self.__created = time.time()
         self.__current_problem = None
-	self.__game_state = self.STOP
+        self.__game_state = self.STOP
 
         # init players
         self.__players = {}

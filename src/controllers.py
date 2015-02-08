@@ -11,6 +11,7 @@ import tornado.websocket
 
 import games
 import validate
+import spec
 
 class BaseWebSocketHandler(tornado.websocket.WebSocketHandler):
 
@@ -188,14 +189,17 @@ class PlayerSocketHandler(BaseWebSocketHandler):
         #TODO check if another browser is already connected
         self.player.register_websocket(self)
 
+        game = get_game(gameid)
+
         # response
         resp = {
             "type": "init_res",
-            "data": {}
+            "data": {spec.GAME_STATE:game.__game_state}
         }
         self.send(resp)
 
         #TODO register handlers here
+
 
 
 class CompileHandler(BaseApiHandler):
