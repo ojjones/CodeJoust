@@ -61,7 +61,7 @@ class Game(WebSocketProxy):
         self.__gameid = gameid
         self.__created = time.time()
         self.__current_problem = None
-        self.__game_state = self.STOP
+        self.__game_state = STOPPED
 
         # init players
         self.__players = {}
@@ -94,7 +94,7 @@ class Game(WebSocketProxy):
         return self.__game_state
 
     def set_game_state(self, state):
-        valid_states = [self.STOP, self.START, PAUSED, self.GAME_OVER]
+        valid_states = [STOPPED, self.START, PAUSED, self.GAME_OVER]
         if state not in valid_states:
             raise Exception("Invalid game state: %s" % state)
         if self.__game_state == STOPPED:
