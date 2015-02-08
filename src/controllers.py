@@ -4,6 +4,8 @@ Tornado request handlers
 """
 import json
 import logging
+import os
+import tempfile
 import traceback
 
 import tornado.web
@@ -333,13 +335,14 @@ class CompileHandler(BaseApiHandler):
         game = games.get_game(gameid)
         #if not game.game
 
-        file_name = str(gameid) + "." + str(playerid) + ".c"
-        text_file = open(file_name, "w")
-        text_file.write(contents)
-        text_file.close()
+        tmpfile = tempfile.NamedTemporaryFile(delete=False,suffix=".c")
+        tmpfile.write(contents)
+        tmpfile.close()
 
         #current_problem = game.current_problem
         current_problem = problems.get_problem("fizzbuzz")
 
-        self.write_json(validate.validate(file_name, validate.CJoustProblem(current_problem)))
+        self.write_json(validate.validate(tmpfile.name, validate.CJoustProblem(current_problem)))
+        os.unlink(tmpfile.name)
         #TODO Send update to game manager and viewer screen
+
