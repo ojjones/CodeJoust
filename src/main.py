@@ -19,7 +19,7 @@ def make_app():
     return tornado.web.Application(
         [
             url("/", controllers.DefaultHandler),
-            url("/newgame", controllers.NewGameHandler, name="newgame"),
+            url("/api/newgame", controllers.NewGameHandler, name="newgame"),
             url("/api/joingame", controllers.JoinGameHandler, name="joingame"),
             url(r"/overlord/g([0-9]+)", controllers.OverlordHandler, name="overlord"),
             url("/overlord/socket", controllers.OverlordSocketHandler, name="overlord_socket"),

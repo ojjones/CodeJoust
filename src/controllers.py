@@ -42,9 +42,9 @@ class DefaultHandler(BaseApiHandler):
 
 class NewGameHandler(BaseApiHandler):
 
-    def get(self):
+    def post(self):
         game = games.new_game()
-        self.redirect(self.reverse_url("overlord", game.gameid))
+        self.write_json({"gameid": game.gameid})
 
 class JoinGameHandler(BaseApiHandler):
 
