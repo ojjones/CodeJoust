@@ -52,7 +52,7 @@ class Player(WebSocketProxy):
 
 class ScoreScreen(WebSocketProxy):
 
-    def __init__(self, playerid):
+    def __init__(self):
         super(ScoreScreen, self).__init__()
 
 class Game(WebSocketProxy):
@@ -135,7 +135,7 @@ class Game(WebSocketProxy):
         return self.__scorescreen
 
     def create_score_screen(self):
-        self.__score = ScoreScreen()
+        self.__scorescreen = ScoreScreen()
 
     def broadcast(self, msg):
         self.send(msg)

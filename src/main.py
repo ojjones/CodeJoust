@@ -21,7 +21,7 @@ def make_app():
         [
             url("/", controllers.DefaultHandler),
             url("/api/newgame", controllers.NewGameHandler, name="newgame"),
-            url("/api/joingame", controllers.JoinGameHandler, name="joingame"),
+            url("/api/playerjoin", controllers.PlayerJoinHandler, name="playerjoin"),
             url(r"/overlord/g([0-9]+)", controllers.OverlordHandler, name="overlord"),
             url("/overlord/socket", controllers.OverlordSocketHandler, name="overlord_socket"),
             url(r"/player/g([0-9]+)p(.+)", controllers.PlayerHandler, name="player"),
@@ -29,7 +29,7 @@ def make_app():
             url(r"/api/problem/(.+)", controllers.ProblemHandler, name="api_problem"),
             url("/api/problems", controllers.ProblemHandler, name="api_problems"),
             url("/api/compile", controllers.CompileHandler, name="compile"),
-            url(r"/score/g([0-9]+)", controllers.ScoreJoinGameHandler, name="score"),
+            url("/api/scorejoin", controllers.ScoreJoinHandler,name="scorejoin"),
             url("/score/socket", controllers.ScoreSocketHandler, name="score_socket"),
         ],
         debug=options.debug,

@@ -117,7 +117,7 @@ class NewGameHandler(BaseApiHandler):
         game = games.new_game()
         self.write_json({GAME_ID : game.gameid})
 
-class JoinGameHandler(BaseApiHandler):
+class PlayerJoinHandler(BaseApiHandler):
 
     def post(self):
         try:
@@ -222,8 +222,6 @@ class PlayerSocketHandler(BaseWebSocketHandler):
         return self.game.get_player(self.__playerid)
 
     def set_playerid(self, playerid):
-        if self.initialized:
-            raise Exception("Socket already initialized")
         self.__playerid = playerid
 
     def handle_init_req(self, data):
@@ -248,11 +246,11 @@ class PlayerSocketHandler(BaseWebSocketHandler):
         # response
         resp = {
             "type" : INIT_RES,
-            "data" : {GAME_STATE : game.__game_state}
+            "data" : {GAME_STATE : game.game_state}
         }
         self.send(resp)
 
-        self.add_handler(INIT_REQ, self.handle_delta_req)
+        self.add_handler(DELTA_UPDATE, self.handle_delta_req)
 
     def handle_delta_req(self, data):
         playerid = str(data[PLAYER_ID])
@@ -265,7 +263,7 @@ class PlayerSocketHandler(BaseWebSocketHandler):
         }
         self.game.score_screen.send(update)
 
-class ScoreJoinGameHandler(BaseApiHandler):
+class ScoreJoinHandler(BaseApiHandler):
 
     def post(self):
         try:
@@ -307,7 +305,7 @@ class ScoreSocketHandler(BaseWebSocketHandler):
         # response
         resp = {
             "type": INIT_RES,
-            "data": {GAME_STATE : game.__game_state}
+            "data": {GAME_STATE : game.game_state}
         }
         self.send(resp)
 
