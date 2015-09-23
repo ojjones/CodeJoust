@@ -39,7 +39,7 @@ def make_app():
 
 def main():
     parse_command_line()
-    print "Starting application on port %s" % options.port
+    print("Starting application on port %s" % options.port)
     app = make_app()
     server = tornado.httpserver.HTTPServer(app)
     server.bind(options.port)

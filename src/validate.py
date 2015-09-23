@@ -110,13 +110,13 @@ def validate(filename, cur_problem):
 if __name__ == '__main__':
     fake_problem = CJoustProblem("samples/sample_input.txt", "samples/sample_output.txt")
     for sample in ["samples/sample1.c", "samples/sample2.c", "samples/sample3.c"]:
-        print "File: %s" % sample
+        print("File: %s" % sample)
         (compile_success, compiler_output, validate_success, validation_output) = validate(sample, fake_problem)
 
-        print "Compilation success: %s" % compile_success
-        print "Compilation output:"
-        print compiler_output
-        print "Validation success: %s" % validate_success
-        print "Diff output:"
-        print validation_output
+        print("Compilation success: %s" % compile_success)
+        print("Compilation output:")
+        print(compiler_output)
+        print("Validation success: %s" % validate_success)
+        print("Diff output:")
+        print(validation_output)
     
