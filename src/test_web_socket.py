@@ -10,6 +10,16 @@ import httplib
 import unittest
 from spec import *
 
+class BaseWebSocket(websocket):
+
+    def send_json(self, msg):
+        msg = json.dumps(msg)
+        self.player_ws.send(msg)
+
+    def recv_json(self):
+        result = self.score_ws.recv()
+        result = json.loads(result)
+
 class WebSocketTest(unittest.TestCase):
 
     def setUp(self):

@@ -13,7 +13,7 @@ CODE = "code"
 MESSAGE = "message"
 WINNER = "winner"
 PROBLEM = "problem"
-#Game ENUM TYPE 
+#Game ENUM TYPE
 GAME_STATE = "GAME_STATE"
 STOPPED = "STOPPED"
 STARTED = "STARTED"
